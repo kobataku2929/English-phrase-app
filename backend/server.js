@@ -72,20 +72,6 @@ app.post("/signup", (req, res) => {
   });
 });
 
-/*app.post("/login", (req, res) => {
-  const sql = "SELECT * FROM login WHERE `email` = ? AND `password` = ? ";
-  db.query(sql, [req.body.email, req.body.password], (err, data) => {
-    if (err) {
-      return res.json("Error");
-    }
-    if (data.length > 0) {
-      return res.json("succuess");
-    } else {
-      return res.json("Faile");
-    }
-  });
-});*/
-
 app.post("/login", (req, res) => {
   const sql = `SELECT * FROM login WHERE email = ?`;
   db.query(sql, [req.body.email], (err, data) => {
@@ -117,6 +103,24 @@ app.post("/login", (req, res) => {
 app.get("/logout", (req, res) => {
   res.clearCookie("token");
   return res.json({ Status: "Success" });
+});
+
+app.post("/addenglish", (req, res) => {
+  const values = [
+    req.body.phrase,
+    req.body.japanese,
+    req.body.sentence,
+    req.body.details,
+  ];
+  const sql =
+    "INSERT INTO posts (`phrase`, `japanese`, `sentence`, `details`) VALUES (?)";
+  db.query(sql, [values], (err, result) => {
+    if (err) {
+      return res.json({ Status: "Error" });
+    }
+
+    return res.json({ Status: "Success " });
+  });
 });
 
 app.listen(8081, () => {
