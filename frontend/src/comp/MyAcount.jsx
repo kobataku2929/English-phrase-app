@@ -1,12 +1,11 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const MyAcount = () => {
   const [auth, setAuth] = useState(false);
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
-  const navigate = useNavigate();
 
   axios.defaults.withCredentials = true;
   useEffect(() => {
@@ -28,7 +27,8 @@ const MyAcount = () => {
     axios
       .get("http://localhost:8081/logout")
       .then((res) => {
-        navigate("/home");
+        //navigate("/home");
+        window.location.reload();
       })
       .catch((err) => console.log(err));
   };
