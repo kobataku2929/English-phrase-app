@@ -1,60 +1,33 @@
-<div class="flex justify-center items-center h-screen">
-  <div class="max-w-sm w-full bg-white p-6 rounded-lg shadow-md">
-    <h2 class="text-2xl font-semibold mb-4">sign up</h2>
-    <form onSubmit="{handleSubmit}">
-      <div class="mb-4">
-        <label for="name" class="block text-gray-700 text-sm font-bold mb-2"
-          >名前</label
-        >
-        <input
-          type="text"
-          id="name"
-          name="name"
-          class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          placeholder="Enter Name"
-          onChange="{handleInput}"
-        />
-        {errors.name && <span class="text-red-500 text-xs">{errors.name}</span>}
-      </div>
-      <div class="mb-4">
-        <label for="email" class="block text-gray-700 text-sm font-bold mb-2"
-          >メールアドレス</label
-        >
-        <input
-          type="email"
-          id="email"
-          name="email"
-          class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          placeholder="Enter Email"
-          onChange="{handleInput}"
-        />
-        {errors.email &&
-        <span class="text-red-500 text-xs">{errors.email}</span>}
-      </div>
-      <div class="mb-4">
-        <label for="password" class="block text-gray-700 text-sm font-bold mb-2"
-          >パスワード</label
-        >
-        <input
-          type="password"
-          id="password"
-          name="password"
-          class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          placeholder="Enter Password"
-          onChange="{handleInput}"
-        />
-        {errors.password &&
-        <span class="text-red-500 text-xs">{errors.password}</span>}
-      </div>
-      <button
-        type="submit"
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-      >
-        sign up
-      </button>
-      <a href="/" class="mt-4 block text-sm text-blue-500 hover:text-blue-700"
-        >ログイン</a
-      >
-    </form>
-  </div>
+import React, { useState, useEffect } from "react"; import axios from "axios";
+function MyComponent() { const [data, setData] = useState([]); const [error,
+setError] = useState(null); const [loading, setLoading] = useState(true); //
+ローディング状態 useEffect(() => { // サーバーからデータを取得する関数を呼び出す
+fetchData(); }, []); const fetchData = () => { axios
+.get("http://localhost:8081") .then((response) => { setData(response.data);
+setError(null); setLoading(false); // データの取得が成功したらローディングを終了
+}) .catch((error) => { setError("An error occurred while fetching data from the
+server."); console.error("Axios error:", error); setLoading(false); //
+データの取得が失敗したらローディングを終了 }); }; if (loading) { return
+<div>Loading...</div>
+; // ローディング中の表示 } if (error) { return
+<div>Error: {error}</div>
+; } return (
+<div>
+  <h1>Data from Server</h1>
+  <ul>
+    {data.map((item) => (
+    <li key="{item.id}">
+      <strong>ID:</strong> {item.id}
+      <br />
+      <strong>フレーズ:</strong> {item.phrase}
+      <br />
+      <strong>センテンス:</strong> {item.sentence}
+      <br />
+      <strong>日本語:</strong> {item.japanese}
+      <br />
+      <strong>詳細:</strong> {item.details}
+    </li>
+    ))}
+  </ul>
 </div>
+); } export default MyComponent;

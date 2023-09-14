@@ -37,7 +37,7 @@ const MyAcount = () => {
     <div>
       {auth ? (
         <div>
-          <h3>You are authorized ---{name}</h3>
+          <h3>{name}としてログイン</h3>
           <button onClick={handleDelete}>Logout</button>
         </div>
       ) : (

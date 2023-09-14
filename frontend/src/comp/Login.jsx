@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import validation from "./LoginValidation";
 import axios from "axios";
+import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 
 const Login = () => {
   const [errors, setErrors] = useState({});
@@ -49,17 +50,19 @@ const Login = () => {
   return (
     <div>
       <div className="max-w-sm mx-auto mt-8 p-6 border rounded-lg">
+        <NavLink to="/">
+          <HomeRoundedIcon className="mb-4" fontSize="large" color="primary" />
+        </NavLink>
         <h2 className="text-2xl font-semibold">sign in</h2>
         <form onSubmit={handleSubmit} className="mt-4">
           <div className="mb-4">
-            <strong>
-              <label
-                htmlFor="email"
-                className="block text-gray-700 text-sm font-bold mb-2"
-              >
-                メールアドレス
-              </label>
-            </strong>
+            <label
+              htmlFor="email"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
+              メールアドレス
+            </label>
+
             {errors.email && (
               <span className="text-red-500 text-xs">{errors.email} </span>
             )}
@@ -73,14 +76,12 @@ const Login = () => {
             />
           </div>
           <div className="mb-4">
-            <strong>
-              <label
-                htmlFor="password"
-                className="block text-gray-700 text-sm font-bold mb-2"
-              >
-                パスワード
-              </label>
-            </strong>
+            <label
+              htmlFor="password"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
+              パスワード
+            </label>
 
             {errors.password && (
               <span className="text-red-500 text-xs">{errors.password} </span>
