@@ -69,21 +69,17 @@ const SignUp = () => {
 
   return (
     <div className="flex justify-center items-center h-screen bg-blue-500">
-      <div className="max-w-sm w-full  bg-orange-500 p-6 rounded-lg shadow-md">
+      <div className="max-w-sm w-full  bg-orange-500 p-6 rounded-lg ">
         <h2 className=" bg-orange-500 text-2xl font-semibold mb-4">sign up</h2>
-        <form
-          className=" bg-orange-500 p-10 rounded-lg shadow-md"
-          onSubmit={handleSubmit}
-        >
+        <form className=" bg-orange-500 p-10 " onSubmit={handleSubmit}>
           <div className="mb-4">
-            <strong>
-              <label
-                htmlFor="name"
-                className="block text-gray-700 text-sm font-bold mb-2"
-              >
-                名前
-              </label>
-            </strong>
+            <label
+              htmlFor="name"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
+              名前
+            </label>
+
             {errors.name && (
               <span className="text-red-500 text-xs">{errors.name} </span>
             )}
@@ -99,14 +95,13 @@ const SignUp = () => {
             />
           </div>
           <div className="mb-4">
-            <strong>
-              <label
-                htmlFor="email"
-                className="block text-gray-700 text-sm font-bold mb-2"
-              >
-                メールアドレス
-              </label>
-            </strong>
+            <label
+              htmlFor="email"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
+              メールアドレス
+            </label>
+
             {errors.email && (
               <span className="text-red-500 text-xs">{errors.email} </span>
             )}
@@ -121,14 +116,13 @@ const SignUp = () => {
             />
           </div>
           <div className="mb-4">
-            <strong>
-              <label
-                htmlFor="password"
-                className="block text-gray-700 text-sm font-bold mb-2"
-              >
-                パスワード
-              </label>
-            </strong>
+            <label
+              htmlFor="password"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
+              パスワード
+            </label>
+
             {errors.password && (
               <span className="text-red-500 text-xs">{errors.password} </span>
             )}
@@ -152,7 +146,7 @@ const SignUp = () => {
           </button>
           <NavLink
             button="true"
-            to="/Login"
+            to="/login"
             className="mt-4 block text-sm text-blue-500 hover:text-blue-700"
           >
             ログイン

@@ -123,6 +123,21 @@ app.post("/addenglish", (req, res) => {
   });
 });
 
+app.get("/post", (req, res) => {
+  // MySQL クエリを実行してデータを取得
+  db.query("SELECT * FROM posts", (err, results) => {
+    if (err) {
+      console.error("MySQL query error:", err);
+      res.status(500).json({
+        error: "An error occurred while fetching data from the database.",
+      });
+    } else {
+      // クエリの結果をクライアントに送信
+      res.json(results);
+    }
+  });
+});
+
 app.listen(8081, () => {
   console.log("listening");
 });

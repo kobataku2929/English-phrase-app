@@ -7,7 +7,7 @@ const header = () => {
   return (
     <header className="bg-orange-500">
       <div className="mx-auto container flex p-5">
-        <h3 className="mr-80">Native words</h3>
+        <h3 className="mr-80">みんなの英語</h3>
         <nav>
           <ul className="mx-auto container flex flex-col md:flex-row ">
             <li className="mr-20">

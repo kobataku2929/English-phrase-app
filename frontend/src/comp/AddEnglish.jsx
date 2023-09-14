@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const AddEnglish = () => {
   const [values, setValues] = useState({
@@ -8,6 +9,7 @@ const AddEnglish = () => {
     sentence: "",
     details: "",
   });
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -21,7 +23,7 @@ const AddEnglish = () => {
           console.error("エラーが発生しました:", res.data.Error);
           alert("データの挿入中にエラーが発生しました");
         } else {
-          alert("投稿完了だぜ");
+          navigate("/");
         }
       })
       .catch((err) => {
@@ -36,11 +38,9 @@ const AddEnglish = () => {
         <h2 className="  text-2xl font-semibold mb-4">フレーズ登録</h2>
         <form className="  p-10  " onSubmit={handleSubmit}>
           <div className="mb-4">
-            <strong>
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                フレーズ
-              </label>
-            </strong>
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              フレーズ
+            </label>
 
             <input
               className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -51,11 +51,9 @@ const AddEnglish = () => {
             />
           </div>
           <div className="mb-4">
-            <strong>
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                和訳
-              </label>
-            </strong>
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              和訳
+            </label>
 
             <input
               className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -68,11 +66,9 @@ const AddEnglish = () => {
             />
           </div>
           <div className="mb-4">
-            <strong>
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                例文
-              </label>
-            </strong>
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              例文
+            </label>
 
             <input
               className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -85,11 +81,9 @@ const AddEnglish = () => {
             />
           </div>
           <div className="mb-4">
-            <strong>
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                メモ
-              </label>
-            </strong>
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              メモ
+            </label>
 
             <input
               className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
