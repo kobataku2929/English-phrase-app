@@ -27,6 +27,7 @@ const db = mysql.createConnection({
 });
 const verifyUser = (req, res, next) => {
   const token = req.cookies.token;
+
   if (!token) {
     return res.json({ Error: "あなたは認証されていません " });
   } else {
@@ -35,6 +36,8 @@ const verifyUser = (req, res, next) => {
         return res.json({ Error: "トークンが一致しません " });
       } else {
         req.name = decoded.name;
+        req.id = decoded.id;
+
         next();
       }
     });
@@ -42,7 +45,7 @@ const verifyUser = (req, res, next) => {
 };
 
 app.get("/", verifyUser, (req, res) => {
-  return res.json({ Status: "Success", name: req.name });
+  return res.json({ Status: "Success", name: req.name, id: req.id });
 });
 
 app.post("/signup", (req, res) => {
@@ -84,10 +87,15 @@ app.post("/login", (req, res) => {
           if (err) return res.json({ Error: "password erro" });
           if (response) {
             const name = data[0].name;
-            const token = jwt.sign({ name }, "jwt-secret-key", {
+            const id = data[0].id;
+
+            const payload = { name, id };
+
+            const token = jwt.sign(payload, "jwt-secret-key", {
               expiresIn: 120 * 24 * 60 * 60,
             });
             res.cookie("token", token);
+
             return res.json({ Status: "Success" });
           } else {
             return res.json({ Error: "パスワードが一致しません" });
@@ -105,15 +113,19 @@ app.get("/logout", (req, res) => {
   return res.json({ Status: "Success" });
 });
 
-app.post("/addenglish", (req, res) => {
+app.post("/addenglish", verifyUser, (req, res) => {
   const values = [
+    req.id,
     req.body.phrase,
     req.body.japanese,
     req.body.sentence,
     req.body.details,
   ];
+
+  console.log(values);
+
   const sql =
-    "INSERT INTO posts (`phrase`, `japanese`, `sentence`, `details`) VALUES (?)";
+    "INSERT INTO posts (`userid`, `phrase`, `japanese`, `sentence`, `details`) VALUES (?)";
   db.query(sql, [values], (err, result) => {
     if (err) {
       return res.json({ Status: "Error" });
@@ -138,6 +150,45 @@ app.get("/post", (req, res) => {
   });
 });
 
+// クライアントからのリクエストを受け取り、ログインユーザーのIDを確認
+/*app.get("/myacount", verifyUser, (req, res) => {
+  const userId = req.userId; // verifyUser ミドルウェアで設定されたユーザーID
+
+  // ユーザーIDに関連する投稿を取得するクエリを実行
+  const sql = "SELECT * FROM login WHERE id = ?";
+  db.query(sql, [userId], (err, results) => {
+    if (err) {
+      console.error("MySQL query error:", err);
+      return res.status(500).json({
+        error: "An error occurred while fetching data from the database.",
+      });
+    } else {
+      // 取得したデータをクライアントに送信
+      res.json(data);
+    }
+  });
+});*/
+
+app.get("/myacount", verifyUser, (req, res) => {
+  const id = req.id;
+  const sql = "SELECT * FROM `posts` WHERE userid = ?;";
+
+  db.query(sql, [id], (err, results) => {
+    if (err) {
+      console.error("MySQL query error:", err);
+      res.status(500).json({
+        error: "An error occurred while fetching data from the database.",
+      });
+    } else {
+      // クエリの結果をクライアントに送信
+      res.json(results);
+    }
+  });
+});
+
 app.listen(8081, () => {
   console.log("listening");
 });
+
+//select*from posts inner join login on posts.userid = login.name;
+//SELECT*FROM posts LEFT JOIN login ON posts.userid = login.name;
