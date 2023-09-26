@@ -137,17 +137,20 @@ app.post("/addenglish", verifyUser, (req, res) => {
 
 app.get("/post", (req, res) => {
   // MySQL クエリを実行してデータを取得
-  db.query("SELECT * FROM posts", (err, results) => {
-    if (err) {
-      console.error("MySQL query error:", err);
-      res.status(500).json({
-        error: "An error occurred while fetching data from the database.",
-      });
-    } else {
-      // クエリの結果をクライアントに送信
-      res.json(results);
+  db.query(
+    "SELECT * FROM `posts` ORDER BY `timestamp` DESC",
+    (err, results) => {
+      if (err) {
+        console.error("MySQL query error:", err);
+        res.status(500).json({
+          error: "An error occurred while fetching data from the database.",
+        });
+      } else {
+        // クエリの結果をクライアントに送信
+        res.json(results);
+      }
     }
-  });
+  );
 });
 
 // クライアントからのリクエストを受け取り、ログインユーザーのIDを確認
@@ -171,7 +174,8 @@ app.get("/post", (req, res) => {
 
 app.get("/myacount", verifyUser, (req, res) => {
   const id = req.id;
-  const sql = "SELECT * FROM `posts` WHERE userid = ?;";
+  const sql =
+    "SELECT * FROM `posts` WHERE userid = ? ORDER BY `timestamp` DESC;";
 
   db.query(sql, [id], (err, results) => {
     if (err) {

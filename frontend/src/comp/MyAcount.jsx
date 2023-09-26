@@ -48,7 +48,7 @@ const MyAcount = () => {
 
   const fetchData = () => {
     axios
-      .get("http://localhost:8081/post")
+      .get("http://localhost:8081/myacount")
       .then((response) => {
         setData(response.data);
         setError(null);
@@ -72,39 +72,6 @@ const MyAcount = () => {
   const toggleFavorite = () => {
     setIsFavorite(!isFavorite);
   };
-
-  /*useEffect(() => {
-    // ログインユーザーのIDを取得
-    axios
-      .get("http://localhost:8081/myacount")
-      .then((res) => {
-        const userId = res.data.id; // レスポンスからユーザーIDを取得
-        // サーバーからログインユーザーに関連する投稿データを取得
-        axios
-          .get(`http://localhost:8081/user-posts?userId=${userId}`)
-          .then((response) => {
-            setUserPosts(response.data);
-            setLoading(false);
-          })
-          .catch((error) => {
-            console.error("Axios error:", error);
-          });
-      })
-      .catch((error) => {
-        console.error("Axios error:", error);
-      });
-  }, []);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-  
-     <ul>
-            {userPosts.map((post) => (
-              <li key={post.id}>{post.title}</li>
-            ))}
-          </ul>
-  */
 
   return (
     <div>

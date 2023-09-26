@@ -29,6 +29,35 @@ function Post() {
       });
   };
 
+  const calculateTimeAgo = (timestamp) => {
+    const now = new Date(); // 現在の時刻
+    const postTime = new Date(timestamp); // タイムスタンプをDateオブジェクトに変換
+
+    // 現在の時刻とタイムスタンプの差分（ミリ秒単位）
+    const timeDifference = now - postTime;
+
+    // 差分を分単位で計算
+    const minutesDifference = Math.floor(timeDifference / 60000);
+    const hoursDifference = Math.floor(minutesDifference / 60);
+    const daysDifference = Math.floor(hoursDifference / 24);
+    const monthsDifference = Math.floor(daysDifference / 30);
+    const yearsDifference = Math.floor(daysDifference / 365);
+
+    if (yearsDifference > 0) {
+      return `${yearsDifference}年前`; // 1年以上の場合
+    } else if (monthsDifference > 0) {
+      return `${monthsDifference}ヶ月前`; // 1ヶ月以上の場合
+    } else if (daysDifference > 0) {
+      return `${daysDifference}日前`; // 1日以上の場合
+    } else if (hoursDifference > 0) {
+      return `${hoursDifference}時間前`; // 1時間以上の場合
+    } else if (minutesDifference > 0) {
+      return `${minutesDifference}分前`; // 1分以上の場合
+    } else {
+      return "1分以内"; // 1分未満の場合
+    }
+  };
+
   if (loading) {
     return <div>Loading...</div>; // ローディング中の表示
   }
@@ -41,12 +70,20 @@ function Post() {
     setIsFavorite(!isFavorite);
   };
   return (
-    <div>
-      <h1>みんなのフレーズだお</h1>
-      <ul>
+    <div className="p-4 bg-gray-100 flex flex-col items-center">
+      <h1 className="text-2xl font-bold mb-4">みんなのフレーズだお</h1>
+      <ul className="text-center ">
         {data.map((item) => (
-          <li key={item.id}>
-            <button onClick={toggleFavorite}>
+          <li className="mb-4 text-left " key={item.id}>
+            <br />
+            <span className="pl-20 text-gray-500 text-sm">
+              {calculateTimeAgo(item.timestamp)}
+            </span>
+            <br />
+            <button
+              className="mb-3 rounded-full bg-blue-500 text-white"
+              onClick={toggleFavorite}
+            >
               {isFavorite ? (
                 <FavoriteRoundedIcon style={{ color: "#FF1493" }} />
               ) : (
@@ -54,13 +91,13 @@ function Post() {
               )}
             </button>
             <br />
-            <strong>フレーズ:</strong> {item.phrase}
+            <strong className="text-lg">フレーズ:</strong> {item.phrase}
             <br />
-            <strong>センテンス:</strong> {item.sentence}
+            <strong className="text-lg">センテンス:</strong> {item.sentence}
             <br />
-            <strong>日本語:</strong> {item.japanese}
+            <strong className="text-lg">日本語:</strong> {item.japanese}
             <br />
-            <strong>詳細:</strong> {item.details}
+            <strong className="text-lg">詳細:</strong> {item.details}
           </li>
         ))}
       </ul>
