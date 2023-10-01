@@ -7,7 +7,7 @@ function Post() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true); // ローディング状態
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [favoriteStatus, setFavoriteStatus] = useState({}); // 各投稿ごとにお気に入りのステータスを持つステートを初期化
 
   useEffect(() => {
     // サーバーからデータを取得する関数を呼び出す
@@ -21,6 +21,11 @@ function Post() {
         setData(response.data);
         setError(null);
         setLoading(false); // データの取得が成功したらローディングを終了
+        //疑問点リフレッシュしたらhandlelike使えんくなる
+        /*const savedStatus = localStorage.getItem("favoriteStatus");
+        if (savedStatus) {
+          setFavoriteStatus(JSON.parse(savedStatus));
+        }*/
       })
       .catch((error) => {
         setError("An error occurred while fetching data from the server.");
@@ -66,9 +71,34 @@ function Post() {
     return <div>Error: {error}</div>;
   }
 
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
+  // お気に入りボタンをクリックしたときにお気に入りステータスをトグルする関数
+  /*const handleLike = (postId) => {
+    setFavoriteStatus((prevStatus) => ({
+      ...prevStatus,
+      [postId]: !prevStatus[postId] || false, // トグル
+    }));
+  };*/
+  const handleLike = (postId) => {
+    // サーバーにいいねの情報を送信
+    axios
+      .post(
+        "http://localhost:8081/post",
+        { PostId: postId, isLiked: !favoriteStatus[postId] },
+        { headers: { accessToken: localStorage.getItem("token") } }
+      )
+      .then((response) => {
+        //alert(response.data);
+        // サーバーからのレスポンスに基づいてクライアント側の状態を更新
+        setFavoriteStatus((prevStatus) => ({
+          ...prevStatus,
+          [postId]: !prevStatus[postId], //response.data.liked, サーバーからのレスポンスの情報を使用してトグル
+        }));
+      })
+      .catch((error) => {
+        console.error("Axios error:", error);
+      });
   };
+
   return (
     <div className="p-4 bg-gray-100 flex flex-col items-center">
       <h1 className="text-2xl font-bold mb-4">みんなのフレーズだお</h1>
@@ -82,9 +112,9 @@ function Post() {
             <br />
             <button
               className="mb-3 rounded-full bg-blue-500 text-white"
-              onClick={toggleFavorite}
+              onClick={() => handleLike(item.id)} // 特定の投稿に対してクリックハンドラを設定
             >
-              {isFavorite ? (
+              {favoriteStatus[item.id] ? (
                 <FavoriteRoundedIcon style={{ color: "#FF1493" }} />
               ) : (
                 <FavoriteBorderRoundedIcon />
@@ -106,3 +136,11 @@ function Post() {
 }
 
 export default Post;
+/*{
+          headers: {
+            accessToken: document.cookie
+              .split("; ")
+              .find((row) => row.startsWith("token="))
+              .split("=")[1],
+          },
+        }*/
