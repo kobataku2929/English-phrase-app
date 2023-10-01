@@ -153,24 +153,48 @@ app.get("/post", (req, res) => {
   );
 });
 
-// クライアントからのリクエストを受け取り、ログインユーザーのIDを確認
-/*app.get("/myacount", verifyUser, (req, res) => {
-  const userId = req.userId; // verifyUser ミドルウェアで設定されたユーザーID
+//いいね機能
+app.post("/post", verifyUser, (req, res) => {
+  const userId = req.id; // ログインユーザーのID
+  const postId = req.body.PostId; // クライアントから送られてきた投稿のID
 
-  // ユーザーIDに関連する投稿を取得するクエリを実行
-  const sql = "SELECT * FROM login WHERE id = ?";
-  db.query(sql, [userId], (err, results) => {
+  console.log(postId);
+
+  // ここでデータベースにいいねの情報を挿入するロジックを実装
+  const sqlInsertLike = "INSERT INTO likes (userid, post) VALUES (?, ?)";
+  db.query(sqlInsertLike, [userId, postId], (err, result) => {
     if (err) {
-      console.error("MySQL query error:", err);
-      return res.status(500).json({
-        error: "An error occurred while fetching data from the database.",
-      });
-    } else {
-      // 取得したデータをクライアントに送信
-      res.json(data);
+      console.error("Error inserting like:", err);
+      return res.json({ Status: "Error" });
     }
+
+    // いいねが成功したら、該当の投稿のいいね数を更新する
+    let sqlUpdateLikesCount;
+
+    // 仮の条件：いいねボタンが押された場合 修正必要
+    const isLiked = req.body.isLiked;
+    // あなたの実際の条件に合わせて変更
+
+    if (isLiked) {
+      // いいねボタンが押された場合のSQL文
+      sqlUpdateLikesCount =
+        "UPDATE posts SET likes_count = likes_count + 1 WHERE id = ?";
+    } else {
+      // いいねボタンが押されていない場合のSQL文
+      sqlUpdateLikesCount =
+        "UPDATE posts SET likes_count = likes_count - 1 WHERE id = ?";
+    }
+
+    db.query(sqlUpdateLikesCount, [postId], (err, updateResult) => {
+      if (err) {
+        console.error("Error updating likes count:", err);
+        return res.json({ Status: "Error" });
+      }
+
+      return res.json({ Status: "Success" });
+    });
   });
-});*/
+});
 
 app.get("/myacount", verifyUser, (req, res) => {
   const id = req.id;
