@@ -13,7 +13,7 @@ const SecondHeader = () => {
             <NavLink to="/myfavorite">お気に入りのフレーズ</NavLink>
           </li>
           <li className="mr-20">
-            <NavLink to="/addenglish">フレーズ登録</NavLink>
+            <NavLink to="/addenglish">フレーズメモ</NavLink>
           </li>
         </ul>
       </nav>
