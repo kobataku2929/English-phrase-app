@@ -3,8 +3,11 @@ import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
+import { logout } from "../redux/userSlice";
+import { useDispatch } from "react-redux";
 
 const MyAcount = () => {
+  const dispatch = useDispatch();
   const [auth, setAuth] = useState(false);
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
@@ -35,6 +38,7 @@ const MyAcount = () => {
     axios
       .get("http://localhost:8081/logout")
       .then((res) => {
+        dispatch(logout());
         //navigate("/home");
         window.location.reload();
       })

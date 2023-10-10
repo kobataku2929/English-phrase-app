@@ -1,40 +1,50 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
+import { useDispatch, useSelector } from "react-redux";
+import { setData, setError, setFavoriteStatus } from "../redux/postSlice";
 
 function Post() {
-  const [data, setData] = useState([]);
+  const dispatch = useDispatch();
+  const { data, error, loading, favoriteStatus } = useSelector(
+    (state) => state.post
+  );
+  /*const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true); // ローディング状態
   const [favoriteStatus, setFavoriteStatus] = useState({}); // 各投稿ごとにお気に入りのステータスを持つステートを初期化
+*/
 
   useEffect(() => {
-    // サーバーからデータを取得する関数を呼び出す
-    fetchData();
-  }, []);
+    const fetchData = () => {
+      axios
+        .get("http://localhost:8081/post")
+        .then((response) => {
+          //投稿の各オブジェクトのユーザーidを確かめる
+          /*response.data.forEach((item) => {
+            const userId = item.userid;
+            console.log(userId);
+          });*/
 
-  const fetchData = () => {
-    axios
-      .get("http://localhost:8081/post")
-      .then((response) => {
-        setData(response.data);
-        setError(null);
-        setLoading(false); // データの取得が成功したらローディングを終了
-        //疑問点リフレッシュしたらhandlelike使えんくなる
-        /*const savedStatus = localStorage.getItem("favoriteStatus");
-        if (savedStatus) {
-          setFavoriteStatus(JSON.parse(savedStatus));
-        }*/
-      })
-      .catch((error) => {
-        setError("An error occurred while fetching data from the server.");
-        console.error("Axios error:", error);
-        setLoading(false); // データの取得が失敗したらローディングを終了
-      });
-  };
+          dispatch(setData(response.data));
+        })
+        .catch((error) => {
+          dispatch(
+            setError("An error occurred while fetching data from the server.")
+          );
+          console.error("Axios error:", error);
+          //setLoading(false); // データの取得が失敗したらローディングを終了
+        });
+    };
+
+    // サーバーからデータを取得する関数を呼び出す
+
+    fetchData();
+  }, [dispatch]);
 
   const calculateTimeAgo = (timestamp) => {
+    //console.log("タイムスタンプ:", timestamp);
     const now = new Date(); // 現在の時刻
     const postTime = new Date(timestamp); // タイムスタンプをDateオブジェクトに変換
 
@@ -71,15 +81,9 @@ function Post() {
     return <div>Error: {error}</div>;
   }
 
-  // お気に入りボタンをクリックしたときにお気に入りステータスをトグルする関数
-  /*const handleLike = (postId) => {
-    setFavoriteStatus((prevStatus) => ({
-      ...prevStatus,
-      [postId]: !prevStatus[postId] || false, // トグル
-    }));
-  };*/
   const handleLike = (postId) => {
     // サーバーにいいねの情報を送信
+    console.log(data);
     axios
       .post(
         "http://localhost:8081/post",
@@ -87,12 +91,15 @@ function Post() {
         { headers: { accessToken: localStorage.getItem("token") } }
       )
       .then((response) => {
+        dispatch(
+          setFavoriteStatus({ postId, isLiked: !favoriteStatus[postId] })
+        );
         //alert(response.data);
         // サーバーからのレスポンスに基づいてクライアント側の状態を更新
-        setFavoriteStatus((prevStatus) => ({
+        /*setFavoriteStatus((prevStatus) => ({
           ...prevStatus,
           [postId]: !prevStatus[postId], //response.data.liked, サーバーからのレスポンスの情報を使用してトグル
-        }));
+        }));*/
       })
       .catch((error) => {
         console.error("Axios error:", error);

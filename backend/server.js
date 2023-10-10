@@ -75,7 +75,7 @@ app.post("/signup", (req, res) => {
   });
 });
 
-app.post("/login", (req, res) => {
+app.post("/login", verifyUser, (req, res) => {
   const sql = `SELECT * FROM login WHERE email = ?`;
   db.query(sql, [req.body.email], (err, data) => {
     if (err) return res.json({ Error: "login error in server" });
@@ -95,8 +95,9 @@ app.post("/login", (req, res) => {
               expiresIn: 120 * 24 * 60 * 60,
             });
             res.cookie("token", token);
+            const userId = req.id;
 
-            return res.json({ Status: "Success" });
+            return res.json({ Status: "Success", userId: userId });
           } else {
             return res.json({ Error: "パスワードが一致しません" });
           }
@@ -200,6 +201,25 @@ app.get("/myacount", verifyUser, (req, res) => {
   const id = req.id;
   const sql =
     "SELECT * FROM `posts` WHERE userid = ? ORDER BY `timestamp` DESC;";
+
+  db.query(sql, [id], (err, results) => {
+    if (err) {
+      console.error("MySQL query error:", err);
+      res.status(500).json({
+        error: "An error occurred while fetching data from the database.",
+      });
+    } else {
+      // クエリの結果をクライアントに送信
+      res.json(results);
+    }
+  });
+});
+app.get("/myfavorite", verifyUser, (req, res) => {
+  const id = req.id;
+  //console.log(postid);
+  const sql =
+    "SELECT * FROM `posts` JOIN likes ON posts.id = likes.post WHERE likes.userid = '?';";
+  //"SELECT * FROM `posts` WHERE userid = ? ORDER BY `timestamp` DESC;";
 
   db.query(sql, [id], (err, results) => {
     if (err) {

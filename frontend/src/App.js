@@ -1,6 +1,6 @@
 import "./App.css";
 //1．useStateとuseEffectをインポート
-//import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
 import Home from "./comp/Home";
 import MyFavorite from "./comp/MyFavorite";
@@ -10,11 +10,14 @@ import Login from "./comp/Login";
 import MyAcount from "./comp/MyAcount";
 import Contuct from "./comp/Contuct";
 import SignUp from "./comp/SignUp";
+import { login } from "./redux/userSlice";
+import { useDispatch } from "react-redux";
 
 import WithHeaderLayout from "./comp/WithHeaderLayout";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
+  const dispatch = useDispatch();
   //useStateの初期値（空）を設定
   /*const [message, setMessage] = useState("");
 
@@ -23,6 +26,14 @@ function App() {
       .then((res) => res.json())
       .then((data) => setMessage(data.message));
   }, []);*/
+  useEffect(() => {
+    const storedUserId = localStorage.getItem("userId");
+    console.log(storedUserId);
+
+    if (storedUserId) {
+      dispatch(login(storedUserId));
+    }
+  }, [dispatch]);
 
   return (
     <Router>

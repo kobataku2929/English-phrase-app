@@ -3,33 +3,21 @@ import { NavLink, useNavigate } from "react-router-dom";
 import validation from "./LoginValidation";
 import axios from "axios";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
+import { login } from "../redux/userSlice";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
-  const [errors, setErrors] = useState({});
+  const dispatch = useDispatch();
 
-  /* const handleSubmit = (event) => {
-    event.preventDefault();
-    setErrors(validation(values));
-    if (errors.email === "" && errors.password === "") {
-      axios
-        .post("http://localhost:8081/login", values)
-        .then((res) => {
-          if (res.data === "Success") {
-            navigate("/");
-          } else {
-            alert("No record exist");
-          }
-        })
-        .catch((err) => console.log(err));
-    }
-  };*/
+  const navigate = useNavigate();
+  const [errors, setErrors] = useState({});
 
   const [values, setValues] = useState({
     email: "",
     password: "",
   });
-  const navigate = useNavigate();
-  axios.defaults.withCredentials = true;
+
+  //axios.defaults.withCredentials = true;
   const handleSubmit = (event) => {
     event.preventDefault();
     setErrors(validation(values));
@@ -38,6 +26,11 @@ const Login = () => {
         .post("http://localhost:8081/login", values)
         .then((res) => {
           if (res.data.Status === "Success") {
+            const userId = res.data.userId;
+            dispatch(login({ userId }));
+            //console.log("userId before localStorage.setItem:", userId);
+            localStorage.setItem("userId", userId);
+
             navigate("/");
           } else {
             alert(res.data.Error);
