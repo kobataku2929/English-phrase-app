@@ -10,22 +10,26 @@ import Login from "./comp/Login";
 import MyAcount from "./comp/MyAcount";
 import Contuct from "./comp/Contuct";
 import SignUp from "./comp/SignUp";
-import { login } from "./redux/userSlice";
+import store from "./index";
+import { setUserId, login } from "./redux/userSlice";
 import { useDispatch } from "react-redux";
 
 import WithHeaderLayout from "./comp/WithHeaderLayout";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import axios from "axios";
 
 function App() {
   const dispatch = useDispatch();
-  //useStateの初期値（空）を設定
-  /*const [message, setMessage] = useState("");
 
   useEffect(() => {
-    fetch("/api")
-      .then((res) => res.json())
-      .then((data) => setMessage(data.message));
-  }, []);*/
+    axios.get("http://localhost:8081").then((response) => {
+      const userId = response.data.id;
+      store.dispatch(setUserId(userId));
+      // localStorage.setItem("userId", userId);
+      console.log(userId);
+    });
+  }, []);
+
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
     console.log(storedUserId);

@@ -34,9 +34,9 @@ const MyFavorite = () => {
   if (error) {
     return <div>Error: {error}</div>;
   }
-  /* return (
+  /*return (
     <div>
-     <ul>
+      <ul>
         {data.map((item) => (
           <li key={item.id}>
             <br />

@@ -3,8 +3,11 @@ import { NavLink, useNavigate } from "react-router-dom";
 import validation from "./LoginValidation";
 import axios from "axios";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
-import { login } from "../redux/userSlice";
+
+import { setUserId, login } from "../redux/userSlice";
 import { useDispatch } from "react-redux";
+
+import store from "../index";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -26,12 +29,15 @@ const Login = () => {
         .post("http://localhost:8081/login", values)
         .then((res) => {
           if (res.data.Status === "Success") {
-            const userId = res.data.userId;
-            dispatch(login({ userId }));
-            //console.log("userId before localStorage.setItem:", userId);
+            const userId = res.data.id;
+
             localStorage.setItem("userId", userId);
+            store.dispatch(setUserId(userId));
+
+            dispatch(login({ userId }));
 
             navigate("/");
+            window.location.reload();
           } else {
             alert(res.data.Error);
           }

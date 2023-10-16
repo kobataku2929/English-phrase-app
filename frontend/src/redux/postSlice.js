@@ -1,12 +1,17 @@
 // postSlice.js
 import { createSlice } from "@reduxjs/toolkit";
 
-const loadFavoriteStatus = () => {
+const loadUserFavoriteStatus = (userId) => {
   try {
-    const storedFavoriteStatus = localStorage.getItem("favoriteStatus");
-    return storedFavoriteStatus ? JSON.parse(storedFavoriteStatus) : {};
+    const storedUserFavoriteStatus = localStorage.getItem(
+      `favoriteStatus_${userId}`
+    );
+    return storedUserFavoriteStatus ? JSON.parse(storedUserFavoriteStatus) : {};
   } catch (error) {
-    console.error("Error loading favorite status from localStorage:", error);
+    console.error(
+      "ローカルストレージからユーザーのいいねの状態を読み込む際にエラーが発生しました:",
+      error
+    );
     return {};
   }
 };
@@ -17,7 +22,9 @@ const postSlice = createSlice({
     data: [],
     error: null,
     loading: true,
-    favoriteStatus: loadFavoriteStatus(),
+    // 現在のユーザーIDを取得する方法があると仮定します
+    userId: localStorage.getItem("userId"),
+    favoriteStatus: loadUserFavoriteStatus(localStorage.getItem("userId")),
   },
   reducers: {
     setData: (state, action) => {
@@ -35,9 +42,9 @@ const postSlice = createSlice({
         ...state.favoriteStatus,
         [postId]: isLiked,
       };
-      // ローカルストレージにいいねの状態を保存
+      // ユーザーごとのいいねの状態をローカルストレージに保存
       localStorage.setItem(
-        "favoriteStatus",
+        `favoriteStatus_${state.userId}`,
         JSON.stringify(state.favoriteStatus)
       );
     },
