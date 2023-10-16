@@ -5,13 +5,18 @@ const userSlice = createSlice({
   name: "user",
   initialState: {
     isLoggedIn: false,
+    userId: null,
     // 他のユーザー情報も必要に応じてここに含める
   },
   reducers: {
+    setUserId: (state, action) => {
+      state.userId = action.payload;
+    },
     login: (state, action) => {
       const { userId } = action.payload;
       state.isLoggedIn = true;
       state.userId = userId;
+      // localStorage.setItem("userId", userId);
       // ローカルストレージからユーザーごとのいいねの状態を読み込む
       const userData = localStorage.getItem(userId);
       if (userData) {
@@ -23,10 +28,10 @@ const userSlice = createSlice({
       state.isLoggedIn = false;
       state.userId = null; // ユーザーIDのクリア
       // ログアウト時にローカルストレージの情報もクリアする場合
-      localStorage.removeItem("user");
+      //localStorage.removeItem("user");
     },
   },
 });
 
-export const { login, logout } = userSlice.actions;
+export const { setUserId, login, logout } = userSlice.actions;
 export default userSlice.reducer;

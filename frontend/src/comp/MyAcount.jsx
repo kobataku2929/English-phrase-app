@@ -5,6 +5,7 @@ import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
 import { logout } from "../redux/userSlice";
 import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 const MyAcount = () => {
   const dispatch = useDispatch();
@@ -17,6 +18,9 @@ const MyAcount = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true); // ローディング状態
   const [isFavorite, setIsFavorite] = useState(false);
+  const userId = useSelector((state) => state.user.userId);
+
+  //console.log(userId);
 
   axios.defaults.withCredentials = true;
   useEffect(() => {
@@ -38,7 +42,9 @@ const MyAcount = () => {
     axios
       .get("http://localhost:8081/logout")
       .then((res) => {
-        dispatch(logout());
+        localStorage.removeItem("userId");
+
+        dispatch(logout({ userId }));
         //navigate("/home");
         window.location.reload();
       })

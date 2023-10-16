@@ -4,12 +4,15 @@ import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
 import { useDispatch, useSelector } from "react-redux";
 import { setData, setError, setFavoriteStatus } from "../redux/postSlice";
+//import store from "../index";
+//import { setUserId } from "../redux/userSlice";
 
 function Post() {
   const dispatch = useDispatch();
   const { data, error, loading, favoriteStatus } = useSelector(
     (state) => state.post
   );
+  //const userId = useSelector((state) => state.user.userId);
   /*const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true); // ローディング状態
@@ -21,13 +24,8 @@ function Post() {
       axios
         .get("http://localhost:8081/post")
         .then((response) => {
-          //投稿の各オブジェクトのユーザーidを確かめる
-          /*response.data.forEach((item) => {
-            const userId = item.userid;
-            console.log(userId);
-          });*/
-
           dispatch(setData(response.data));
+          //store.dispatch(setUserId(userId));
         })
         .catch((error) => {
           dispatch(
@@ -83,7 +81,7 @@ function Post() {
 
   const handleLike = (postId) => {
     // サーバーにいいねの情報を送信
-    console.log(data);
+    //console.log(data);
     axios
       .post(
         "http://localhost:8081/post",

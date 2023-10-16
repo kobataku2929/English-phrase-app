@@ -74,8 +74,8 @@ app.post("/signup", (req, res) => {
     });
   });
 });
-
-app.post("/login", verifyUser, (req, res) => {
+//verifyUserこいつのせいでログアウトしたらログインできんくなる
+app.post("/login", (req, res) => {
   const sql = `SELECT * FROM login WHERE email = ?`;
   db.query(sql, [req.body.email], (err, data) => {
     if (err) return res.json({ Error: "login error in server" });
@@ -95,9 +95,8 @@ app.post("/login", verifyUser, (req, res) => {
               expiresIn: 120 * 24 * 60 * 60,
             });
             res.cookie("token", token);
-            const userId = req.id;
 
-            return res.json({ Status: "Success", userId: userId });
+            return res.json({ Status: "Success", id: id });
           } else {
             return res.json({ Error: "パスワードが一致しません" });
           }
@@ -111,6 +110,7 @@ app.post("/login", verifyUser, (req, res) => {
 
 app.get("/logout", (req, res) => {
   res.clearCookie("token");
+
   return res.json({ Status: "Success" });
 });
 
