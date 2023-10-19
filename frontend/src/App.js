@@ -26,13 +26,13 @@ function App() {
       const userId = response.data.id;
       store.dispatch(setUserId(userId));
       // localStorage.setItem("userId", userId);
-      console.log(userId);
+      //console.log(userId);
     });
   }, []);
 
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
-    console.log(storedUserId);
+    //console.log(storedUserId);
 
     if (storedUserId) {
       dispatch(login(storedUserId));

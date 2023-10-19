@@ -74,7 +74,7 @@ app.post("/signup", (req, res) => {
     });
   });
 });
-//verifyUserこいつのせいでログアウトしたらログインできんくなる
+
 app.post("/login", (req, res) => {
   const sql = `SELECT * FROM login WHERE email = ?`;
   db.query(sql, [req.body.email], (err, data) => {
@@ -159,7 +159,7 @@ app.post("/post", verifyUser, (req, res) => {
   const userId = req.id; // ログインユーザーのID
   const postId = req.body.PostId; // クライアントから送られてきた投稿のID
 
-  console.log(postId);
+  // console.log(postId);
 
   // ここでデータベースにいいねの情報を挿入するロジックを実装
   const sqlInsertLike = "INSERT INTO likes (userid, post) VALUES (?, ?)";
@@ -171,6 +171,7 @@ app.post("/post", verifyUser, (req, res) => {
 
     // いいねが成功したら、該当の投稿のいいね数を更新する
     let sqlUpdateLikesCount;
+    //let sqlLikeDelete;
 
     // 仮の条件：いいねボタンが押された場合 修正必要
     const isLiked = req.body.isLiked;
@@ -184,6 +185,7 @@ app.post("/post", verifyUser, (req, res) => {
       // いいねボタンが押されていない場合のSQL文
       sqlUpdateLikesCount =
         "UPDATE posts SET likes_count = likes_count - 1 WHERE id = ?";
+      //sqlLikeDelete = "DELETE FROM likes WHERE id = ?";
     }
 
     db.query(sqlUpdateLikesCount, [postId], (err, updateResult) => {
@@ -215,13 +217,15 @@ app.get("/myacount", verifyUser, (req, res) => {
   });
 });
 app.get("/myfavorite", verifyUser, (req, res) => {
-  const id = req.id;
-  //console.log(postid);
-  const sql =
-    "SELECT * FROM `posts` JOIN likes ON posts.id = likes.post WHERE likes.userid = '?';";
+  //const id = req.id;
+  const favoritePostIds = req.query.favoritePostIds.split(",");
+
+  console.log(favoritePostIds);
+  const sql = "SELECT * FROM `posts` WHERE id IN (?)";
+  // "SELECT * FROM `posts` JOIN likes ON posts.id = likes.post WHERE likes.userid = '?'";
   //"SELECT * FROM `posts` WHERE userid = ? ORDER BY `timestamp` DESC;";
 
-  db.query(sql, [id], (err, results) => {
+  db.query(sql, [favoritePostIds], (err, results) => {
     if (err) {
       console.error("MySQL query error:", err);
       res.status(500).json({
