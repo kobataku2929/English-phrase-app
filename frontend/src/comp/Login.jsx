@@ -52,7 +52,7 @@ const Login = () => {
         <NavLink to="/">
           <HomeRoundedIcon className="mb-4" fontSize="large" color="primary" />
         </NavLink>
-        <h2 className="text-2xl font-semibold">sign in</h2>
+        <h2 className="text-2xl font-semibold">ログイン</h2>
         <form onSubmit={handleSubmit} className="mt-4">
           <div className="mb-4">
             <label

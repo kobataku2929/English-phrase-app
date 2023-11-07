@@ -59,14 +59,14 @@ const AddEnglish = () => {
                 フレーズ
               </label>
 
-              <input
-                className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
+              <textarea
+                className="appearance-none w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 onChange={(e) =>
                   setValues({ ...values, phrase: e.target.value })
                 }
                 placeholder="hello"
                 name="phrase"
+                rows="4" // ここで行数を指定します
               />
             </div>
             <div className="mb-4">
