@@ -37,6 +37,8 @@ const verifyUser = (req, res, next) => {
       } else {
         req.name = decoded.name;
         req.id = decoded.id;
+        req.email = decoded.email;
+        req.password = decoded.password;
 
         next();
       }
@@ -45,7 +47,13 @@ const verifyUser = (req, res, next) => {
 };
 
 app.get("/", verifyUser, (req, res) => {
-  return res.json({ Status: "Success", name: req.name, id: req.id });
+  return res.json({
+    Status: "Success",
+    name: req.name,
+    id: req.id,
+    email: req.email,
+    password: req.password,
+  });
 });
 
 app.post("/signup", (req, res) => {
@@ -88,15 +96,23 @@ app.post("/login", (req, res) => {
           if (response) {
             const name = data[0].name;
             const id = data[0].id;
+            const email = data[0].email;
+            const password = data[0].password;
 
-            const payload = { name, id };
+            const payload = { name, id, email, password };
+            //console.log(email);
 
             const token = jwt.sign(payload, "jwt-secret-key", {
               expiresIn: 120 * 24 * 60 * 60,
             });
             res.cookie("token", token);
 
-            return res.json({ Status: "Success", id: id });
+            return res.json({
+              Status: "Success",
+              id: id,
+              email: email,
+              password: password,
+            });
           } else {
             return res.json({ Error: "パスワードが一致しません" });
           }
@@ -235,6 +251,57 @@ app.get("/myfavorite", verifyUser, (req, res) => {
       // クエリの結果をクライアントに送信
       res.json(results);
     }
+  });
+});
+
+/*app.post("/contuct", verifyUser, async (req, res) => {
+  const { name, message } = req.body;
+  const email = req.email;
+  const password = req.password;
+  //bcrypt.compare(req.body.password.toString(), data[0].password);
+  console.log(password);
+
+  // nodemailerの設定
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: email, // 送信元のメールアドレス
+      pass: password, // 送信元のメールアドレスのパスワード
+    },
+  });
+
+  // メールの内容
+  const mailOptions = {
+    from: "your-email@gmail.com",
+    to: email,
+    subject: "お問い合わせがありました",
+    text: `お名前: ${name}\nメールアドレス: ${email}\n\n${message}`,
+  };
+
+  try {
+    // メール送信
+    await transporter.sendMail(mailOptions);
+    res.status(200).send("メールが送信されました");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("メールの送信に失敗しました");
+  }
+});
+
+*/
+app.post("/contuct", verifyUser, (req, res) => {
+  const values = [req.email, req.body.name, req.body.message];
+
+  console.log(values);
+
+  const sql = "INSERT INTO contuct (`email`, `name`, `message`) VALUES (?)";
+  db.query(sql, [values], (err, result) => {
+    console.log(err);
+    if (err) {
+      return res.json({ Status: "Error" });
+    }
+
+    return res.json({ Status: "Success " });
   });
 });
 
