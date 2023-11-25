@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setData, setError } from "../redux/postSlice";
 import { useNavigate } from "react-router-dom";
+import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 
 //メモにバックアップ保存
 const MyFavorite = () => {
@@ -16,6 +17,7 @@ const MyFavorite = () => {
   const { data, error, loading, favoriteStatus } = useSelector(
     (state) => state.post
   );
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -63,22 +65,36 @@ const MyFavorite = () => {
   if (error) {
     return <div>Error: {error}</div>;
   }
+  const handleLoginIconClick = () => {
+    navigate("/login");
+  };
+
   return (
     <div>
-      <ul>
-        {data.map((item) => (
-          <li key={item.id}>
-            <br />
-            <strong>フレーズ:</strong> {item.phrase}
-            <br />
-            <strong>センテンス:</strong> {item.sentence}
-            <br />
-            <strong>日本語:</strong> {item.japanese}
-            <br />
-            <strong>詳細:</strong> {item.details}
-          </li>
-        ))}
-      </ul>
+      {isLoggedIn ? (
+        <ul>
+          {data.map((item) => (
+            <li key={item.id}>
+              <br />
+              <strong>フレーズ:</strong> {item.phrase}
+              <br />
+              <strong>センテンス:</strong> {item.sentence}
+              <br />
+              <strong>日本語:</strong> {item.japanese}
+              <br />
+              <strong>詳細:</strong> {item.details}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div>
+          <h3>あなたは認証されていません</h3>
+          <div onClick={handleLoginIconClick}>
+            <LoginRoundedIcon />
+            <span>ログイン</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

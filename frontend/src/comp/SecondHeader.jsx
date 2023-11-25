@@ -7,7 +7,7 @@ const SecondHeader = () => {
       <nav className="bg-orange-100">
         <ul className="flex p-5 items-center justify-center">
           <li className="mr-20">
-            <NavLink to="/">みんなのmemo</NavLink>
+            <NavLink to="/home">みんなのmemo</NavLink>
           </li>
           <li className="mr-20">
             <NavLink to="/myfavorite">お気に入りのフレーズ</NavLink>

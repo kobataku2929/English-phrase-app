@@ -10,9 +10,10 @@ import Login from "./comp/Login";
 import MyAcount from "./comp/MyAcount";
 import Contuct from "./comp/Contuct";
 import SignUp from "./comp/SignUp";
+
 import store from "./index";
 import { setUserId, login } from "./redux/userSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import WithHeaderLayout from "./comp/WithHeaderLayout";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -38,14 +39,39 @@ function App() {
       dispatch(login(storedUserId));
     }
   }, [dispatch]);
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+
+  //console.log(isLoggedIn);
+
+  /*
+  
+
+
+  */
 
   return (
     <Router>
       <div className="App">
         <Routes>
           {/* Headerを含むルート */}
+          <Route
+            path="/"
+            element={
+              <div>
+                {isLoggedIn ? (
+                  // ログイン済みの場合はメインコンポーネントを表示
+
+                  <Home />
+                ) : (
+                  // 未ログインの場合はログインコンポーネントを表示
+                  <Login />
+                )}
+              </div>
+            }
+          />
           <Route element={<WithHeaderLayout />}>
-            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
+
             <Route path="/myfavorite" element={<MyFavorite />} />
             <Route path="/addenglish" element={<AddEnglish />} />
             <Route path="/myacount" element={<MyAcount />} />
@@ -58,12 +84,6 @@ function App() {
         </Routes>
       </div>
     </Router>
-
-    /*<div className="App">
-      <h1>フロントエンド</h1>
-
-      <p>{message}</p>
-    </div>*/
   );
 }
 

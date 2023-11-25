@@ -36,7 +36,7 @@ const Login = () => {
 
             dispatch(login({ userId }));
 
-            navigate("/");
+            navigate("/home");
             window.location.reload();
           } else {
             alert(res.data.Error);
@@ -46,10 +46,12 @@ const Login = () => {
     }
   };
 
+  //homeアイコン消す？
+
   return (
     <div>
       <div className="max-w-sm mx-auto mt-8 p-6 border rounded-lg">
-        <NavLink to="/">
+        <NavLink to="/home">
           <HomeRoundedIcon className="mb-4" fontSize="large" color="primary" />
         </NavLink>
         <h2 className="text-2xl font-semibold">ログイン</h2>
