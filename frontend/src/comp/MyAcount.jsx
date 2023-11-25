@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
 import { logout } from "../redux/userSlice";
@@ -19,6 +19,7 @@ const MyAcount = () => {
   const [loading, setLoading] = useState(true); // ローディング状態
   const [isFavorite, setIsFavorite] = useState(false);
   const userId = useSelector((state) => state.user.userId);
+  const navigate = useNavigate();
 
   //console.log(userId);
 
@@ -45,7 +46,7 @@ const MyAcount = () => {
         localStorage.removeItem("userId");
 
         dispatch(logout({ userId }));
-        //navigate("/home");
+        navigate("/");
         window.location.reload();
       })
       .catch((err) => console.log(err));
