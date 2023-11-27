@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import validation from "./LoginValidation";
 import axios from "axios";
-import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
+
+import ContactSupportRoundedIcon from "@mui/icons-material/ContactSupportRounded";
 
 import { setUserId, login } from "../redux/userSlice";
 import { useDispatch } from "react-redux";
@@ -51,8 +52,12 @@ const Login = () => {
   return (
     <div>
       <div className="max-w-sm mx-auto mt-8 p-6 border rounded-lg">
-        <NavLink to="/home">
-          <HomeRoundedIcon className="mb-4" fontSize="large" color="primary" />
+        <NavLink to="/contuct">
+          <ContactSupportRoundedIcon
+            className="mb-4"
+            fontSize="large"
+            color="primary"
+          />
         </NavLink>
         <h2 className="text-2xl font-semibold">ログイン</h2>
         <form onSubmit={handleSubmit} className="mt-4">

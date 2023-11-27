@@ -289,7 +289,7 @@ app.get("/myfavorite", verifyUser, (req, res) => {
 });
 
 */
-app.post("/contuct", verifyUser, (req, res) => {
+app.post("/contuact", verifyUser, (req, res) => {
   const values = [req.email, req.body.name, req.body.message];
 
   console.log(values);

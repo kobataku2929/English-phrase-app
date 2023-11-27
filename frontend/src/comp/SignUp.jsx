@@ -11,42 +11,12 @@ const SignUp = () => {
   });
   const [errors, setErrors] = useState({});
 
-  /*const handleSubmit = (event) => {
-    event.preventDefault();
-    setErrors(validation(values));
-    if (errors.name === "" && errors.email === "" && errors.password === "") {
-      axios
-      .post("http://localhost:8081/SignUp", values)
-      .then((res) => {
-        navigate("/");
-      })
-      .catch((err) => console.log(err));
-    }
-  };*/
+  console.log(errors);
 
   const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
     setErrors(validation(values));
-
-    /*if (res.data.Status === "Error") {
-      window.alert("そのメールアドレスは既に登録されています");
-    } else if (
-      errors.name === "" &&
-      errors.email === "" &&
-      errors.password === ""
-    ) {
-      axios
-        .post("http://localhost:8081/signup", values)
-        .then((res) => {
-          if (res.data.Status === "Success") {
-            navigate("/login");
-          } else {
-            alert("erro");
-          }
-        })
-        .catch((err) => console.log(err));
-    }*/
 
     if (errors.name === "" && errors.email === "" && errors.password === "") {
       axios
@@ -70,7 +40,7 @@ const SignUp = () => {
   return (
     <div className="flex justify-center items-center h-screen bg-blue-500">
       <div className="max-w-sm w-full  bg-orange-500 p-6 rounded-lg ">
-        <h2 className=" bg-orange-500 text-2xl font-semibold mb-4">sign up</h2>
+        <h2 className=" bg-orange-500 text-2xl font-semibold mb-4">新規登録</h2>
         <form className=" bg-orange-500 p-10 " onSubmit={handleSubmit}>
           <div className="mb-4">
             <label

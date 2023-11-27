@@ -8,8 +8,10 @@ import MyFavorite from "./comp/MyFavorite";
 import AddEnglish from "./comp/AddEnglish";
 import Login from "./comp/Login";
 import MyAcount from "./comp/MyAcount";
-import Contuct from "./comp/Contuct";
+import Contact from "./comp/Contact";
 import SignUp from "./comp/SignUp";
+import Header from "./comp/Header";
+import SecondHeader from "./comp/SecondHeader";
 
 import store from "./index";
 import { setUserId, login } from "./redux/userSlice";
@@ -60,8 +62,11 @@ function App() {
               <div>
                 {isLoggedIn ? (
                   // ログイン済みの場合はメインコンポーネントを表示
-
-                  <Home />
+                  <div>
+                    <Header />
+                    <SecondHeader />
+                    <Home />
+                  </div>
                 ) : (
                   // 未ログインの場合はログインコンポーネントを表示
                   <Login />
@@ -75,7 +80,7 @@ function App() {
             <Route path="/myfavorite" element={<MyFavorite />} />
             <Route path="/addenglish" element={<AddEnglish />} />
             <Route path="/myacount" element={<MyAcount />} />
-            <Route path="/contuct" element={<Contuct />} />
+            <Route path="/contact" element={<Contact />} />
           </Route>
 
           {/* Headerを含まないルート */}

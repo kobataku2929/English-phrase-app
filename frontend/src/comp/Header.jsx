@@ -11,13 +11,10 @@ const header = () => {
         <nav>
           <ul className="mx-auto container flex flex-col md:flex-row ">
             <li className="mr-20">
-              <NavLink to="/login">Login</NavLink>
-            </li>
-            <li className="mr-20">
               <NavLink to="/myacount">MyAcount</NavLink>
             </li>
             <li className="mr-20">
-              <NavLink to="/contuct">Contuct</NavLink>
+              <NavLink to="/contact">Contact</NavLink>
             </li>
           </ul>
         </nav>

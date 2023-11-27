@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, NavLink } from "react-router-dom";
+import addEnglishChecker from "./AddEnglishChecker";
 
 const AddEnglish = () => {
   const [values, setValues] = useState({
@@ -9,6 +10,7 @@ const AddEnglish = () => {
     sentence: "",
     details: "",
   });
+  const [errors, setErrors] = useState({});
 
   const navigate = useNavigate();
 
@@ -29,23 +31,26 @@ const AddEnglish = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setErrors(addEnglishChecker(values));
     console.log(values);
-    axios
-      .post("http://localhost:8081/addenglish", values)
-      .then((res) => {
-        /*if (res.data.Status === "Success") {
+    if (errors.phrase === "" && errors.phrase === "") {
+      axios
+        .post("http://localhost:8081/addenglish", values)
+        .then((res) => {
+          /*if (res.data.Status === "Success") {
           //window.alert("挿入完了");
         } else*/ if (res.data.Status === "Error") {
-          console.error("エラーが発生しました:", res.data.Error);
-          alert("データの挿入中にエラーが発生しました");
-        } else {
-          navigate("/");
-        }
-      })
-      .catch((err) => {
-        console.error("ネットワークエラー:", err);
-        alert("ネットワークエラーが発生しました");
-      });
+            console.error("エラーが発生しました:", res.data.Error);
+            alert("データの挿入中にエラーが発生しました");
+          } else {
+            navigate("/");
+          }
+        })
+        .catch((err) => {
+          console.error("ネットワークエラー:", err);
+          alert("ネットワークエラーが発生しました");
+        });
+    }
   };
 
   return (
@@ -58,6 +63,9 @@ const AddEnglish = () => {
               <label className="block text-gray-700 text-sm font-bold mb-2">
                 フレーズ
               </label>
+              {errors.phrase && (
+                <span className="text-red-500 text-xs">{errors.phrase} </span>
+              )}
 
               <textarea
                 className="appearance-none w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -73,6 +81,9 @@ const AddEnglish = () => {
               <label className="block text-gray-700 text-sm font-bold mb-2">
                 和訳
               </label>
+              {errors.japanese && (
+                <span className="text-red-500 text-xs">{errors.japanese} </span>
+              )}
 
               <input
                 className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
