@@ -111,7 +111,7 @@ function Post() {
         {data.map((item) => (
           <li className="mb-4 text-left " key={item.id}>
             <br />
-            <span className="pl-20 text-gray-500 text-sm">
+            <span className="ml-80  text-gray-500 text-sm">
               {calculateTimeAgo(item.timestamp)}
             </span>
             <br />
@@ -126,13 +126,16 @@ function Post() {
               )}
             </button>
             <br />
-            <strong className="text-lg">フレーズ:</strong> {item.phrase}
+            <strong className="text-lg">{item.phrase}</strong>
             <br />
-            <strong className="text-lg">センテンス:</strong> {item.sentence}
+            和訳:
+            <span className="text-lg ml-2 ">{item.japanese}</span>
             <br />
-            <strong className="text-lg">日本語:</strong> {item.japanese}
+            例文:
+            <span className="text-lg ml-2 ">{item.sentence}</span>
             <br />
-            <strong className="text-lg">詳細:</strong> {item.details}
+            詳細:
+            <span className="text-lg ml-2 ">{item.details}</span>
           </li>
         ))}
       </ul>
