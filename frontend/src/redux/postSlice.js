@@ -36,8 +36,17 @@ const postSlice = createSlice({
       state.error = action.payload;
       state.loading = false;
     },
+    /*deletePost: (state, action) => {
+      const { postId } = action.payload;
+      console.log(postId);
+
+      state.data = state.data.filter((post) => post.id !== postId);
+      state.error = null;
+      state.loading = false;
+    },*/
     setFavoriteStatus: (state, action) => {
       const { postId, isLiked } = action.payload;
+
       state.favoriteStatus = {
         ...state.favoriteStatus,
         [postId]: isLiked,
@@ -51,5 +60,6 @@ const postSlice = createSlice({
   },
 });
 
-export const { setData, setError, setFavoriteStatus } = postSlice.actions;
+export const { setData, setError, setFavoriteStatus, deletePost } =
+  postSlice.actions;
 export default postSlice.reducer;

@@ -52,7 +52,7 @@ const Login = () => {
   return (
     <div>
       <div className="max-w-sm mx-auto mt-8 p-6 border rounded-lg">
-        <NavLink to="/contuct">
+        <NavLink to="/contact">
           <ContactSupportRoundedIcon
             className="mb-4"
             fontSize="large"
