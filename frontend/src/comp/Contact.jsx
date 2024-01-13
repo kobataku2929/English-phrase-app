@@ -22,7 +22,7 @@ function Contuct() {
     setErrors(contactChecker(values));
     if (errors.name === "" && errors.message === "") {
       axios
-        .post("http://localhost:8081/contuct", values)
+        .post("http://localhost:8081/contact", values)
         .then((res) => {
           if (res.data.Status === "Error") {
             console.error("エラーが発生しました:", res.data.Error);

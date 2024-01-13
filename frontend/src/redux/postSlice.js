@@ -36,8 +36,28 @@ const postSlice = createSlice({
       state.error = action.payload;
       state.loading = false;
     },
+    /*editPost: (state, action) => {
+      const { postId, newData } = action.payload;
+
+      // データ編集の実装
+      const editedData = state.data.map((post) =>
+        post.id === postId ? { ...post, ...newData } : post
+      );
+
+      state.data = editedData;
+      //console.log(action.payload);
+    },*/
+    /*deletePost: (state, action) => {
+      const { postId } = action.payload;
+      console.log(postId);
+
+      state.data = state.data.filter((post) => post.id !== postId);
+      state.error = null;
+      state.loading = false;
+    },*/
     setFavoriteStatus: (state, action) => {
       const { postId, isLiked } = action.payload;
+
       state.favoriteStatus = {
         ...state.favoriteStatus,
         [postId]: isLiked,

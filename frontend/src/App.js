@@ -12,6 +12,7 @@ import Contact from "./comp/Contact";
 import SignUp from "./comp/SignUp";
 import Header from "./comp/Header";
 import SecondHeader from "./comp/SecondHeader";
+import PostEditor from "./comp/PostEditor";
 
 import store from "./index";
 import { setUserId, login } from "./redux/userSlice";
@@ -86,6 +87,8 @@ function App() {
           {/* Headerを含まないルート */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+
+          <Route path="/postEditor/:postId" element={<PostEditor />} />
         </Routes>
       </div>
     </Router>

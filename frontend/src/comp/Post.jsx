@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
 import { useDispatch, useSelector } from "react-redux";
 import { setData, setError, setFavoriteStatus } from "../redux/postSlice";
-//import store from "../index";
+import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
+import "animate.css";
 //import { setUserId } from "../redux/userSlice";
 
 function Post() {
@@ -12,6 +13,8 @@ function Post() {
   const { data, error, loading, favoriteStatus } = useSelector(
     (state) => state.post
   );
+  const [foldedStates, setFoldedStates] = useState({});
+
   //const userId = useSelector((state) => state.user.userId);
   /*const [data, setData] = useState([]);
   const [error, setError] = useState(null);
@@ -40,6 +43,14 @@ function Post() {
 
     fetchData();
   }, [dispatch]);
+
+  const handleButtonClick = (postId) => {
+    // 特定の投稿のisFoldedの状態を切り替える
+    setFoldedStates((prevFoldedStates) => ({
+      ...prevFoldedStates,
+      [postId]: !prevFoldedStates[postId],
+    }));
+  };
 
   const calculateTimeAgo = (timestamp) => {
     //console.log("タイムスタンプ:", timestamp);
@@ -82,6 +93,7 @@ function Post() {
   const handleLike = (postId) => {
     // サーバーにいいねの情報を送信
     //console.log(data);
+
     axios
       .post(
         "http://localhost:8081/post",
@@ -116,7 +128,7 @@ function Post() {
             </span>
             <br />
             <button
-              className="mb-3 rounded-full bg-blue-500 text-white"
+              className="mb-3 rounded-full text-black"
               onClick={() => handleLike(item.id)} // 特定の投稿に対してクリックハンドラを設定
             >
               {favoriteStatus[item.id] ? (
@@ -134,8 +146,22 @@ function Post() {
             例文:
             <span className="text-lg ml-2 ">{item.sentence}</span>
             <br />
-            詳細:
-            <span className="text-lg ml-2 ">{item.details}</span>
+            <span>詳細:</span>
+            {foldedStates[item.id] ? (
+              <ExpandMoreRoundedIcon
+                className="transform rotate-180"
+                onClick={() => handleButtonClick(item.id)}
+              />
+            ) : (
+              <ExpandMoreRoundedIcon
+                onClick={() => handleButtonClick(item.id)}
+              />
+            )}
+            {foldedStates[item.id] ? (
+              <div className="text-lg ml-2 animate__animated animate__fadeIn">
+                {item.details}
+              </div>
+            ) : null}
           </li>
         ))}
       </ul>

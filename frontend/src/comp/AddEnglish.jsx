@@ -10,6 +10,7 @@ const AddEnglish = () => {
     sentence: "",
     details: "",
   });
+
   const [errors, setErrors] = useState({});
 
   const navigate = useNavigate();
@@ -43,7 +44,7 @@ const AddEnglish = () => {
             console.error("エラーが発生しました:", res.data.Error);
             alert("データの挿入中にエラーが発生しました");
           } else {
-            navigate("/");
+            navigate("/myacount");
           }
         })
         .catch((err) => {
@@ -114,15 +115,14 @@ const AddEnglish = () => {
               <label className="block text-gray-700 text-sm font-bold mb-2">
                 詳細
               </label>
-
-              <input
-                className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
+              <textarea
+                className="appearance-none w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 onChange={(e) =>
                   setValues({ ...values, details: e.target.value })
                 }
                 placeholder="挨拶するときによく使う。人を選ばず誰にでも使う"
                 name="details"
+                rows="4" // ここで行数を指定します
               />
             </div>
             <button

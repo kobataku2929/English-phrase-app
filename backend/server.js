@@ -215,6 +215,30 @@ app.post("/post", verifyUser, (req, res) => {
   });
 });
 
+app.post("/postEditor/:postId", verifyUser, (req, res) => {
+  const newData = [
+    req.body.phrase,
+    req.body.sentence,
+    req.body.japanese,
+    req.body.details,
+  ];
+
+  const postId = req.params.postId;
+  const numericPostId = parseInt(postId);
+
+  console.log(numericPostId);
+
+  const sql =
+    "UPDATE posts SET phrase = ?, sentence = ?, japanese = ?, details = ? WHERE id = ?";
+  db.query(sql, [...newData, numericPostId], (err, result) => {
+    if (err) {
+      return res.json({ Status: "Error" });
+    }
+
+    return res.json({ Status: "Success " });
+  });
+});
+
 app.get("/myacount", verifyUser, (req, res) => {
   const id = req.id;
   const sql =
@@ -229,6 +253,24 @@ app.get("/myacount", verifyUser, (req, res) => {
     } else {
       // クエリの結果をクライアントに送信
       res.json(results);
+    }
+  });
+});
+
+app.post("/myacount", verifyUser, (req, res) => {
+  const id = req.body.postId;
+
+  const sql = "DELETE FROM `posts` WHERE `posts`.`id` = ?;";
+
+  db.query(sql, [id], (err, results) => {
+    if (err) {
+      console.error("MySQL query error:", err);
+      res.status(500).json({
+        error: "An error occurred while fetching data from the database.",
+      });
+    } else {
+      // クエリの結果をクライアントに送信
+      return res.json({ Status: "Success" });
     }
   });
 });
@@ -289,7 +331,7 @@ app.get("/myfavorite", verifyUser, (req, res) => {
 });
 
 */
-app.post("/contuact", verifyUser, (req, res) => {
+app.post("/contact", verifyUser, (req, res) => {
   const values = [req.email, req.body.name, req.body.message];
 
   console.log(values);
