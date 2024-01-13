@@ -10,6 +10,7 @@ const AddEnglish = () => {
     sentence: "",
     details: "",
   });
+
   const [errors, setErrors] = useState({});
 
   const navigate = useNavigate();

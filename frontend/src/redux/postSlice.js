@@ -36,6 +36,17 @@ const postSlice = createSlice({
       state.error = action.payload;
       state.loading = false;
     },
+    /*editPost: (state, action) => {
+      const { postId, newData } = action.payload;
+
+      // データ編集の実装
+      const editedData = state.data.map((post) =>
+        post.id === postId ? { ...post, ...newData } : post
+      );
+
+      state.data = editedData;
+      //console.log(action.payload);
+    },*/
     /*deletePost: (state, action) => {
       const { postId } = action.payload;
       console.log(postId);
@@ -60,6 +71,5 @@ const postSlice = createSlice({
   },
 });
 
-export const { setData, setError, setFavoriteStatus, deletePost } =
-  postSlice.actions;
+export const { setData, setError, setFavoriteStatus } = postSlice.actions;
 export default postSlice.reducer;

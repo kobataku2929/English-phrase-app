@@ -3,12 +3,7 @@ import axios from "axios";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setData,
-  setError,
-  setFavoriteStatus,
-  deletePost,
-} from "../redux/postSlice";
+import { setData, setError, setFavoriteStatus } from "../redux/postSlice";
 import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
 import "animate.css";
 //import { setUserId } from "../redux/userSlice";
@@ -19,6 +14,7 @@ function Post() {
     (state) => state.post
   );
   const [foldedStates, setFoldedStates] = useState({});
+
   //const userId = useSelector((state) => state.user.userId);
   /*const [data, setData] = useState([]);
   const [error, setError] = useState(null);
@@ -93,10 +89,6 @@ function Post() {
   if (error) {
     return <div>Error: {error}</div>;
   }
-  const handleRemove = (postId) => {
-    console.log(postId);
-    dispatch(deletePost({ postId: data[0].id }));
-  };
 
   const handleLike = (postId) => {
     // サーバーにいいねの情報を送信
@@ -134,8 +126,6 @@ function Post() {
             <span className="ml-80  text-gray-500 text-sm">
               {calculateTimeAgo(item.timestamp)}
             </span>
-            <br />
-            <button onClick={() => handleRemove(item.id)}>削除</button>
             <br />
             <button
               className="mb-3 rounded-full text-black"
