@@ -2,6 +2,13 @@
 
 module.exports = {
   // 他の設定...
+  theme: {
+    extend: {
+      screens: {
+        // sm: "660px",
+      },
+    },
+  },
 
   plugins: [
     require("@tailwindcss/aspect-ratio"),

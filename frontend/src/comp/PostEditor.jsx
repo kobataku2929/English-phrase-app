@@ -1,9 +1,10 @@
 import { useParams, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { setData, setError, editPost } from "../redux/postSlice";
+import { setData, setError } from "../redux/postSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import addEnglishChecker from "./AddEnglishChecker";
 
 const PostEditor = () => {
   const { postId } = useParams();
@@ -29,7 +30,7 @@ const PostEditor = () => {
   useEffect(() => {
     const fetchData = () => {
       axios
-        .get("http://localhost:8081/myacount")
+        .get("http://localhost:8081/myaccount")
         .then((response) => {
           dispatch(setData(response.data));
 
@@ -59,6 +60,9 @@ const PostEditor = () => {
       details: values.details,
     };
 
+    setErrors(addEnglishChecker(values));
+    console.log(values);
+
     // console.log(numericPostId);
 
     axios
@@ -68,7 +72,7 @@ const PostEditor = () => {
           console.error("エラーが発生しました:", res.data.Error);
           alert("投稿編集エラー");
         } else {
-          window.location.reload();
+          //  window.location.reload();
         }
       })
       .catch((err) => {
@@ -78,8 +82,16 @@ const PostEditor = () => {
 
     //dispatch(editPost({ postId, newData }));
 
-    navigate("/myacount");
+    navigate("/myaccount");
   };
+
+  if (loading) {
+    return <div>Loading...</div>; // ローディング中の表示
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div>

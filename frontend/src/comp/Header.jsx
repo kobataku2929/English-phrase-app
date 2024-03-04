@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import logo from "../pictures/logo.EM_no_BG.png";
 
 //import "./Header.css";
 
@@ -7,17 +8,8 @@ const header = () => {
   return (
     <header className="bg-orange-500">
       <div className="mx-auto container flex p-5">
+        <img src={logo} alt="EMのロゴ" className="w-16 h-16" />
         <h3 className="mr-80">English Memorandum 英語メモアプリ</h3>
-        <nav>
-          <ul className="mx-auto container flex flex-col md:flex-row ">
-            <li className="mr-20">
-              <NavLink to="/myacount">MyAcount</NavLink>
-            </li>
-            <li className="mr-20">
-              <NavLink to="/contact">Contact</NavLink>
-            </li>
-          </ul>
-        </nav>
       </div>
     </header>
   );

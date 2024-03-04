@@ -5,7 +5,7 @@ import axios from "axios";
 
 import ContactSupportRoundedIcon from "@mui/icons-material/ContactSupportRounded";
 
-import { setUserId, login } from "../redux/userSlice";
+import { setUserId, login, setName } from "../redux/userSlice";
 import { useDispatch } from "react-redux";
 
 import store from "../index";
@@ -31,13 +31,17 @@ const Login = () => {
         .then((res) => {
           if (res.data.Status === "Success") {
             const userId = res.data.id;
+            const name = res.data.name;
+            console.log(name);
 
             localStorage.setItem("userId", userId);
+            localStorage.setItem("name", name);
             store.dispatch(setUserId(userId));
+            dispatch(setName(name));
 
             dispatch(login({ userId }));
 
-            navigate("/home");
+            navigate("/");
             window.location.reload();
           } else {
             alert(res.data.Error);

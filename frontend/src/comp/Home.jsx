@@ -13,6 +13,7 @@ const Home = () => {
   const handleLoginIconClick = () => {
     navigate("/login");
   };
+
   return (
     <div>
       {isLoggedIn ? (
