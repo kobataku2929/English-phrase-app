@@ -19,8 +19,9 @@ function Contuct() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setErrors(contactChecker(values));
-    if (errors.name === "" && errors.message === "") {
+    const newErrors = contactChecker(values);
+    setErrors(newErrors);
+    if (newErrors.name === "" && newErrors.message === "") {
       axios
         .post("http://localhost:8081/contact", values)
         .then((res) => {
@@ -28,8 +29,9 @@ function Contuct() {
             console.error("エラーが発生しました:", res.data.Error);
             alert("データの挿入中にエラーが発生しました");
           } else {
-            window.alert("お問い合わせ完了しました");
             navigate("/");
+            window.location.reload();
+            window.alert("お問い合わせ完了しました");
           }
         })
         .catch((err) => {
@@ -40,7 +42,7 @@ function Contuct() {
   };
 
   return (
-    <div className="container mx-auto mt-10">
+    <div className="flex flex-col items-center container mx-auto mt-10 ">
       <h1 className="text-3xl font-bold mb-6">お問い合わせ・意見フォーム</h1>
       <form onSubmit={handleSubmit} className="max-w-lg">
         <div className="mb-4">

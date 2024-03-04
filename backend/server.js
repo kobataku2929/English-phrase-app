@@ -100,7 +100,6 @@ app.post("/login", (req, res) => {
             const password = data[0].password;
 
             const payload = { name, id, email, password };
-            //console.log(email);
 
             const token = jwt.sign(payload, "jwt-secret-key", {
               expiresIn: 120 * 24 * 60 * 60,
@@ -112,6 +111,7 @@ app.post("/login", (req, res) => {
               id: id,
               email: email,
               password: password,
+              name: name,
             });
           } else {
             return res.json({ Error: "パスワードが一致しません" });
@@ -226,7 +226,7 @@ app.post("/postEditor/:postId", verifyUser, (req, res) => {
   const postId = req.params.postId;
   const numericPostId = parseInt(postId);
 
-  console.log(numericPostId);
+  //console.log(numericPostId);
 
   const sql =
     "UPDATE posts SET phrase = ?, sentence = ?, japanese = ?, details = ? WHERE id = ?";
@@ -239,7 +239,7 @@ app.post("/postEditor/:postId", verifyUser, (req, res) => {
   });
 });
 
-app.get("/myacount", verifyUser, (req, res) => {
+app.get("/myaccount", verifyUser, (req, res) => {
   const id = req.id;
   const sql =
     "SELECT * FROM `posts` WHERE userid = ? ORDER BY `timestamp` DESC;";
@@ -257,7 +257,7 @@ app.get("/myacount", verifyUser, (req, res) => {
   });
 });
 
-app.post("/myacount", verifyUser, (req, res) => {
+app.post("/myaccount", verifyUser, (req, res) => {
   const id = req.body.postId;
 
   const sql = "DELETE FROM `posts` WHERE `posts`.`id` = ?;";
@@ -278,7 +278,7 @@ app.get("/myfavorite", verifyUser, (req, res) => {
   //const id = req.id;
   const favoritePostIds = req.query.favoritePostIds.split(",");
 
-  console.log(favoritePostIds);
+  //console.log(favoritePostIds);
   const sql = "SELECT * FROM `posts` WHERE id IN (?)";
   // "SELECT * FROM `posts` JOIN likes ON posts.id = likes.post WHERE likes.userid = '?'";
   //"SELECT * FROM `posts` WHERE userid = ? ORDER BY `timestamp` DESC;";
@@ -291,6 +291,7 @@ app.get("/myfavorite", verifyUser, (req, res) => {
       });
     } else {
       // クエリの結果をクライアントに送信
+
       res.json(results);
     }
   });
@@ -334,7 +335,7 @@ app.get("/myfavorite", verifyUser, (req, res) => {
 app.post("/contact", verifyUser, (req, res) => {
   const values = [req.email, req.body.name, req.body.message];
 
-  console.log(values);
+  // console.log(values);
 
   const sql = "INSERT INTO contuct (`email`, `name`, `message`) VALUES (?)";
   db.query(sql, [values], (err, result) => {
@@ -347,9 +348,92 @@ app.post("/contact", verifyUser, (req, res) => {
   });
 });
 
+app.post("/createfolder", verifyUser, (req, res) => {
+  const values = [req.id, req.body.name];
+  //const pickedUpPostIds = [req.bbody.pickedUpPostIds];
+  // console.log(pickedUpPostIds);
+
+  //console.log(values);
+
+  const sql = "INSERT INTO folders (`userid`, `foldername`) VALUES (?)";
+  db.query(sql, [values], (err, result) => {
+    console.log(err);
+    if (err) {
+      return res.json({ Status: "Error" });
+    }
+
+    return res.json({ Status: "Success " });
+  });
+});
+
+app.get("/createfolder", verifyUser, (req, res) => {
+  const userid = req.id;
+  console.log(userid);
+  const sql =
+    "SELECT * FROM `folders` WHERE userid = ? ORDER BY `timestamp` DESC;";
+
+  db.query(sql, [userid], (err, results) => {
+    if (err) {
+      console.error("MySQL query error:", err);
+      res.status(500).json({
+        error: "An error occurred while fetching data from the database.",
+      });
+    } else {
+      // クエリの結果をクライアントに送信
+      res.json(results);
+    }
+  });
+});
+
+app.post("/createfolder/pickedUpPostIds", verifyUser, (req, res) => {
+  const getPickedUpPostIds = [req.body.pickedUpPostIds];
+  const pickedUpPostIds = getPickedUpPostIds[0];
+  const userid = req.id;
+
+  const folder =
+    "SELECT * FROM folders WHERE userid = ? ORDER BY `timestamp` DESC LIMIT 1;";
+  db.query(folder, [userid], (err, result) => {
+    console.log(err);
+    if (err) {
+      return res.json({ Status: "Error" });
+    }
+    const folderId = result.length > 0 ? result[0].id : null;
+
+    for (const postId of pickedUpPostIds) {
+      console.log(postId);
+      const sql = `INSERT INTO folder_post_mapping (folderid, postid) VALUES (?, ?)`;
+      db.query(sql, [folderId, postId], (err, result) => {
+        if (err) {
+          console.error("データの挿入に失敗しました: ", err);
+        }
+      });
+    }
+    return res.json({ Status: "Success " });
+  });
+});
+
+app.get("/myaccount/:folderId", verifyUser, (req, res) => {
+  //const id = req.id;
+  const folderId = req.params.folderId;
+  const numericFolderId = parseInt(folderId);
+
+  const sql =
+    "SELECT * FROM `folder_post_mapping`JOIN folders ON folder_post_mapping.folderid = folders.id JOIN posts ON folder_post_mapping.postid = posts.id WHERE folderid = ?;";
+
+  db.query(sql, [numericFolderId], (err, results) => {
+    if (err) {
+      console.error("MySQL query error:", err);
+      res.status(500).json({
+        error: "An error occurred while fetching data from the database.",
+      });
+    } else {
+      // クエリの結果をクライアントに送信
+
+      res.json(results);
+    }
+  });
+});
+
 app.listen(8081, () => {
   console.log("listening");
 });
-
-//select*from posts inner join login on posts.userid = login.name;
-//SELECT*FROM posts LEFT JOIN login ON posts.userid = login.name;

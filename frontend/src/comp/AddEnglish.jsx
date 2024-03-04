@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, forwardRef } from "react";
 import axios from "axios";
 import { useNavigate, NavLink } from "react-router-dom";
 import addEnglishChecker from "./AddEnglishChecker";
 
-const AddEnglish = () => {
+const AddEnglish = forwardRef((props, ref) => {
   const [values, setValues] = useState({
     phrase: "",
     japanese: "",
@@ -32,9 +32,12 @@ const AddEnglish = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setErrors(addEnglishChecker(values));
+    //setErrors(addEnglishChecker(values)); これだと2回ボタンを押さないと送信されない
+    const newErrors = addEnglishChecker(values);
+    setErrors(newErrors);
+
     console.log(values);
-    if (errors.phrase === "" && errors.phrase === "") {
+    if (newErrors.phrase === "" && newErrors.japanese === "") {
       axios
         .post("http://localhost:8081/addenglish", values)
         .then((res) => {
@@ -44,7 +47,8 @@ const AddEnglish = () => {
             console.error("エラーが発生しました:", res.data.Error);
             alert("データの挿入中にエラーが発生しました");
           } else {
-            navigate("/myacount");
+            navigate("/myaccount");
+            window.location.reload();
           }
         })
         .catch((err) => {
@@ -55,10 +59,9 @@ const AddEnglish = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-blue-500">
+    <div className="flex justify-center items-center  ">
       {auth ? (
-        <div className="max-w-sm w-full  bg-white  p-6 rounded-lg shadow-md">
-          <h2 className="  text-2xl font-semibold mb-4">フレーズ登録</h2>
+        <div className="max-w-sm w-full  bg-white  p-6 ">
           <form className="  p-10  " onSubmit={handleSubmit}>
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -86,14 +89,14 @@ const AddEnglish = () => {
                 <span className="text-red-500 text-xs">{errors.japanese} </span>
               )}
 
-              <input
-                className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="tetx"
+              <textarea
+                className="appearance-none w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 onChange={(e) =>
                   setValues({ ...values, japanese: e.target.value })
                 }
                 placeholder="こんにちは"
                 name="japanese"
+                rows="4"
               />
             </div>
             <div className="mb-4">
@@ -101,14 +104,14 @@ const AddEnglish = () => {
                 例文
               </label>
 
-              <input
-                className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
+              <textarea
+                className="appearance-none w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 onChange={(e) =>
                   setValues({ ...values, sentence: e.target.value })
                 }
                 placeholder="Hello English"
                 name="sentence"
+                rows="4"
               />
             </div>
             <div className="mb-4">
@@ -140,6 +143,6 @@ const AddEnglish = () => {
       )}
     </div>
   );
-};
+});
 
 export default AddEnglish;

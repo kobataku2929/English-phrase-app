@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setData, setError, setFavoriteStatus } from "../redux/postSlice";
 import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
 import "animate.css";
+import VerticalAlignBottomRoundedIcon from "@mui/icons-material/VerticalAlignBottomRounded";
 //import { setUserId } from "../redux/userSlice";
 
 function Post() {
@@ -118,17 +119,20 @@ function Post() {
 
   return (
     <div className="p-4 bg-gray-100 flex flex-col items-center">
-      <h1 className="text-2xl font-bold mb-4">みんなのフレーズだお</h1>
+      {/*  <h1 className="bg-gray-300 text-2xl font-bold mb-4 sticky top-0 ">
+        みんなのフレーズだお
+      </h1> 
+      */}
       <ul className="text-center ">
         {data.map((item) => (
-          <li className="mb-4 text-left " key={item.id}>
+          <li className="mb-10 text-left w-fit " key={item.id}>
             <br />
-            <span className="ml-80  text-gray-500 text-sm">
+            <span className="  text-gray-500 text-sm">
               {calculateTimeAgo(item.timestamp)}
             </span>
             <br />
             <button
-              className="mb-3 rounded-full text-black"
+              className="mb-3 mt-6 rounded-full text-black"
               onClick={() => handleLike(item.id)} // 特定の投稿に対してクリックハンドラを設定
             >
               {favoriteStatus[item.id] ? (
@@ -158,9 +162,7 @@ function Post() {
               />
             )}
             {foldedStates[item.id] ? (
-              <div className="text-lg ml-2 animate__animated animate__fadeIn">
-                {item.details}
-              </div>
+              <div className="text-lg ml-2 ">{item.details}</div>
             ) : null}
           </li>
         ))}
