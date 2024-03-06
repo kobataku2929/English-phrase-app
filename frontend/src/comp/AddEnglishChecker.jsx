@@ -1,8 +1,11 @@
 function addEnglishChecker(values) {
   let error = {};
+  const maxLength = 100;
 
   if (values.phrase === "") {
     error.phrase = "記入してください";
+  } else if (values.phrase.length > maxLength) {
+    error.phrase = "100字以内にしてください";
   } else {
     error.phrase = "";
   }
@@ -11,6 +14,8 @@ function addEnglishChecker(values) {
   } else {
     error.japanese = "";
   }
+  //console.log(phraseAsNumber);
+  console.log(values.phrase);
 
   return error;
 }

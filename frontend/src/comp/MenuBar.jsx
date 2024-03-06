@@ -109,7 +109,7 @@ const MenuBar = () => {
               }}
               className="modal-overlay absolute inset-0 bg-black opacity-50"
             ></div>
-            <div className="modal z-10 bg-white p-4 rounded">
+            <div className="modal z-10 bg-white p-4 w-3/5 h-5/6	overflow-y-auto rounded">
               <AddEnglish />
             </div>
           </div>
@@ -150,7 +150,7 @@ const MenuBar = () => {
               }}
               className="modal-overlay absolute inset-0 bg-black opacity-50"
             ></div>
-            <div className="modal z-10 bg-white p-4 rounded w-3/5 h-3/4">
+            <div className="modal z-10 bg-white p-4 rounded w-3/5 h-3/5 overflow-y-auto">
               <Contact />
             </div>
           </div>

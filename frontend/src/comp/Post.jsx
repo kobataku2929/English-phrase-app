@@ -142,7 +142,9 @@ function Post() {
               )}
             </button>
             <br />
-            <strong className="text-lg">{item.phrase}</strong>
+            <strong className="text-lg whitespace-pre-line ">
+              {item.phrase}
+            </strong>
             <br />
             和訳:
             <span className="text-lg ml-2 ">{item.japanese}</span>
