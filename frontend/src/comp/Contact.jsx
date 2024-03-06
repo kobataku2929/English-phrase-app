@@ -42,9 +42,9 @@ function Contuct() {
   };
 
   return (
-    <div className="flex flex-col items-center container mx-auto mt-10 ">
-      <h1 className="text-3xl font-bold mb-6">お問い合わせ・意見フォーム</h1>
-      <form onSubmit={handleSubmit} className="max-w-lg">
+    <div className="flex flex-col items-center container mx-auto mt-10  ">
+      <h1 className="text-3xl font-bold mb-6">お問い合わせ・ご意見フォーム</h1>
+      <form onSubmit={handleSubmit} className="w-3/5">
         <div className="mb-4">
           <label
             htmlFor="name"
@@ -77,7 +77,7 @@ function Contuct() {
           <textarea
             id="message"
             name="message"
-            rows="4"
+            rows="5"
             className="mt-1 p-2 border rounded-md w-full"
             onChange={(e) => setValues({ ...values, message: e.target.value })}
           ></textarea>

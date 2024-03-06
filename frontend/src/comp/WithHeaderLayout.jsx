@@ -30,7 +30,7 @@ const WithHeaderLayout = () => {
           </div>
 
           {/* メインコンテンツ */}
-          <div className="flex-1 ">
+          <div className="flex-1  ">
             <Outlet />
             <Footer />
 

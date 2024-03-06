@@ -35,15 +35,14 @@ const AddEnglish = forwardRef((props, ref) => {
     //setErrors(addEnglishChecker(values)); これだと2回ボタンを押さないと送信されない
     const newErrors = addEnglishChecker(values);
     setErrors(newErrors);
+    console.log(newErrors);
 
     console.log(values);
     if (newErrors.phrase === "" && newErrors.japanese === "") {
       axios
         .post("http://localhost:8081/addenglish", values)
         .then((res) => {
-          /*if (res.data.Status === "Success") {
-          //window.alert("挿入完了");
-        } else*/ if (res.data.Status === "Error") {
+          if (res.data.Status === "Error") {
             console.error("エラーが発生しました:", res.data.Error);
             alert("データの挿入中にエラーが発生しました");
           } else {
@@ -62,7 +61,13 @@ const AddEnglish = forwardRef((props, ref) => {
     <div className="flex justify-center items-center  ">
       {auth ? (
         <div className="max-w-sm w-full  bg-white  p-6 ">
-          <form className="  p-10  " onSubmit={handleSubmit}>
+          <form className="  w-4/5	relative" onSubmit={handleSubmit}>
+            <button
+              className="absolute top-0 right-0 bg-gray-100 hover:bg-gray-300 text-gray-700 font-bold   rounded focus:outline-none focus:shadow-outline"
+              type="submit"
+            >
+              登録
+            </button>
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">
                 フレーズ
