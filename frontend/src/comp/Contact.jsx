@@ -42,7 +42,7 @@ function Contuct() {
   };
 
   return (
-    <div className="flex flex-col items-center container mx-auto mt-10  ">
+    <div className="flex flex-col items-center container mx-auto mt-10  z-50">
       <h1 className="text-3xl font-bold mb-6">お問い合わせ・ご意見フォーム</h1>
       <form onSubmit={handleSubmit} className="w-3/5">
         <div className="mb-4">

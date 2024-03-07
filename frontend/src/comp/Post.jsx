@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,6 +16,7 @@ function Post() {
     (state) => state.post
   );
   const [foldedStates, setFoldedStates] = useState({});
+  const [errors, setErrors] = useState({});
 
   //const userId = useSelector((state) => state.user.userId);
   /*const [data, setData] = useState([]);
@@ -29,14 +31,12 @@ function Post() {
         .get("http://localhost:8081/post")
         .then((response) => {
           dispatch(setData(response.data));
-          //store.dispatch(setUserId(userId));
         })
         .catch((error) => {
           dispatch(
             setError("An error occurred while fetching data from the server.")
           );
           console.error("Axios error:", error);
-          //setLoading(false); // データの取得が失敗したらローディングを終了
         });
     };
 
@@ -149,22 +149,29 @@ function Post() {
             和訳:
             <span className="text-lg ml-2 ">{item.japanese}</span>
             <br />
-            例文:
-            <span className="text-lg ml-2 ">{item.sentence}</span>
+            {item.sentence ? (
+              <div>
+                例文:
+                <span className="text-lg ml-2 ">{item.sentence}</span>
+              </div>
+            ) : null}
             <br />
-            <span>詳細:</span>
-            {foldedStates[item.id] ? (
-              <ExpandMoreRoundedIcon
-                className="transform rotate-180"
-                onClick={() => handleButtonClick(item.id)}
-              />
-            ) : (
-              <ExpandMoreRoundedIcon
-                onClick={() => handleButtonClick(item.id)}
-              />
-            )}
-            {foldedStates[item.id] ? (
-              <div className="text-lg ml-2 ">{item.details}</div>
+            {item.details ? (
+              <div>
+                {foldedStates[item.id] ? (
+                  <ExpandMoreRoundedIcon
+                    className="transform rotate-180"
+                    onClick={() => handleButtonClick(item.id)}
+                  />
+                ) : (
+                  <ExpandMoreRoundedIcon
+                    onClick={() => handleButtonClick(item.id)}
+                  />
+                )}
+                {foldedStates[item.id] ? (
+                  <div className="text-lg ml-2 ">{item.details}</div>
+                ) : null}
+              </div>
             ) : null}
           </li>
         ))}
