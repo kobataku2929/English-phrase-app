@@ -7,6 +7,9 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 
 import { setData, setError } from "../redux/postSlice";
+import Avatar from "@mui/material/Avatar";
+import { red, cyan, teal } from "@mui/material/colors";
+import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import EditNoteRoundedIcon from "@mui/icons-material/EditNoteRounded";
 import PushPinRoundedIcon from "@mui/icons-material/PushPinRounded";
@@ -29,11 +32,10 @@ const MyAcount = () => {
 
   const { data, error, loading } = useSelector((state) => state.post);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [foldedStates, setFoldedStates] = useState({});
   const [currentPostId, setCurrentPostId] = useState(null);
   const [currentPhrase, setCurrentPhrase] = useState(null);
   const storedName = localStorage.getItem("name");
-
-  //console.log(userId);
 
   axios.defaults.withCredentials = true;
 
@@ -92,26 +94,6 @@ const MyAcount = () => {
       .catch((err) => console.log(err));
   };
 
-  /*useEffect(() => {
-    // サーバーからデータを取得する関数を呼び出す
-    fetchData();
-  }, []);
-
-  const fetchData = () => {
-    axios
-      .get("http://localhost:8081/myacount")
-      .then((response) => {
-        setData(response.data);
-        setError(null);
-        setLoading(false); // データの取得が成功したらローディングを終了
-      })
-      .catch((error) => {
-        setError("An error occurred while fetching data from the server.");
-        console.error("Axios error:", error);
-        setLoading(false); // データの取得が失敗したらローディングを終了
-      });
-  };*/
-
   const handleRemove = (postId) => {
     console.log(postId);
     const askDelete = window.confirm("本当に消しますか？");
@@ -168,11 +150,19 @@ const MyAcount = () => {
       console.log("メニューの内側をクリックした");
     }
   };
+  const handleButtonClick = (postId) => {
+    // 特定の投稿のisFoldedの状態を切り替える
+    setFoldedStates((prevFoldedStates) => ({
+      ...prevFoldedStates,
+      [postId]: !prevFoldedStates[postId],
+    }));
+  };
 
   return (
     <div className="p-4 bg-gray-100 flex flex-col items-center">
       {auth ? (
         <div>
+          <EditNoteRoundedIcon />
           <h3>{storedName}としてログイン</h3>
 
           <button onClick={handleDelete}>Logout</button>
@@ -180,9 +170,20 @@ const MyAcount = () => {
           <CreateFolder />
 
           <ul>
+            <strong>
+              英語フレーズ:<Avatar sx={{ bgcolor: red[500] }}>N</Avatar>
+            </strong>
+            <br />
+            <strong>日本語:</strong>
+            <br />
+            <strong>センテンス:</strong>
+            <br />
+            <strong>詳細:</strong>
+            <br />
             {data.map((item) => (
               <li key={item.id}>
                 <br />
+
                 <MoreHorizRoundedIcon
                   onClick={() => openModal(item.id, item.phrase)}
                 />
@@ -191,7 +192,7 @@ const MyAcount = () => {
                     onClick={(e) => {
                       closeWithClickOutSideMethod(e, setIsModalOpen);
                     }}
-                    className="  fixed inset-0 flex items-center justify-center bg-black bg-opacity-10"
+                    className=" z-20 fixed inset-0 flex items-center justify-center bg-black bg-opacity-5"
                   >
                     <div className="bg-white p-8 rounded">
                       <span
@@ -214,14 +215,81 @@ const MyAcount = () => {
                     </div>
                   </div>
                 )}
+
                 <br />
-                <strong>フレーズ:</strong> {item.phrase}
+                <div className="flex  ">
+                  <span className="mt-1  ">
+                    <Avatar
+                      sx={{
+                        zIndex: 0,
+                        bgcolor: red[500],
+                        width: 16,
+                        height: 16,
+                        fontSize: 10,
+                      }}
+                    >
+                      英
+                    </Avatar>
+                  </span>
+
+                  <span className="ml-2">{item.phrase}</span>
+                </div>
                 <br />
-                <strong>センテンス:</strong> {item.sentence}
+                <div className="flex ">
+                  <span className="mt-1 ">
+                    <Avatar
+                      sx={{
+                        bgcolor: teal[500],
+                        width: 16,
+                        height: 16,
+                        fontSize: 10,
+                      }}
+                    >
+                      和
+                    </Avatar>
+                  </span>
+
+                  <span className="ml-2"> {item.japanese}</span>
+                </div>
+
                 <br />
-                <strong>日本語:</strong> {item.japanese}
+                {item.sentence ? (
+                  <div className="flex ">
+                    <span className="mt-1 ">
+                      <Avatar
+                        sx={{
+                          bgcolor: cyan[500],
+                          width: 16,
+                          height: 16,
+                          fontSize: 10,
+                        }}
+                      >
+                        例
+                      </Avatar>
+                    </span>
+
+                    <span className="ml-2"> {item.sentence}</span>
+                  </div>
+                ) : null}
+
                 <br />
-                <strong>詳細:</strong> {item.details}
+                {item.details ? (
+                  <div>
+                    {foldedStates[item.id] ? (
+                      <ExpandMoreRoundedIcon
+                        className="transform rotate-180"
+                        onClick={() => handleButtonClick(item.id)}
+                      />
+                    ) : (
+                      <ExpandMoreRoundedIcon
+                        onClick={() => handleButtonClick(item.id)}
+                      />
+                    )}
+                    {foldedStates[item.id] ? (
+                      <div className="text-lg ml-2 ">{item.details}</div>
+                    ) : null}
+                  </div>
+                ) : null}
               </li>
             ))}
           </ul>

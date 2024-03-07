@@ -70,7 +70,7 @@ const AddEnglish = forwardRef((props, ref) => {
             </button>
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">
-                フレーズ
+                英語フレーズ
               </label>
               {errors.phrase && (
                 <span className="text-red-500 text-xs">{errors.phrase} </span>

@@ -56,7 +56,7 @@ const MenuBar = () => {
   };
 
   return (
-    <div className="pt-5 fixed  bg-gray-200 min-h-full w-44 ">
+    <div className="pt-5 fixed z-10 bg-gray-200 min-h-full w-44 ">
       <ul className="ml-3 flex   sm:flex-col ">
         <li
           className={`flex-grow-10 mb-3 mr-3 ml-1 ${
@@ -150,7 +150,7 @@ const MenuBar = () => {
               }}
               className="modal-overlay absolute inset-0 bg-black opacity-50"
             ></div>
-            <div className="modal z-10 bg-white p-4 rounded w-3/5 h-3/5 overflow-y-auto">
+            <div className=" modal z-10 bg-white p-4 rounded w-3/5 h-3/5 overflow-y-auto">
               <Contact />
             </div>
           </div>
