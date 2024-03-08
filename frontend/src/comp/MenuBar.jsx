@@ -79,7 +79,7 @@ const MenuBar = () => {
         >
           <NavLink
             to="/myfavorite"
-            className="flex items-center hover:bg-gray-300 focus:bg-gray-300   focus:ring focus:ring-gray-400   font-bold py-2 px- rounded w-full"
+            className="flex items-center hover:bg-gray-300 focus:bg-gray-300   focus:ring focus:ring-gray-400   font-bold py-2  rounded w-full"
           >
             {" "}
             <FavoriteRoundedIcon />

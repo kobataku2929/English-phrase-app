@@ -183,23 +183,6 @@ const PostEditor = () => {
             </button>
           </form>
         ))}
-
-      <ul>
-        {data
-          .filter((item) => item.id === numericPostId) // 特定の postId に一致するアイテムだけをフィルタリング
-          .map((item) => (
-            <li key={item.id}>
-              <br />
-              <strong>フレーズ:</strong> {item.phrase}
-              <br />
-              <strong>センテンス:</strong> {item.sentence}
-              <br />
-              <strong>日本語:</strong> {item.japanese}
-              <br />
-              <strong>詳細:</strong> {item.details}
-            </li>
-          ))}
-      </ul>
     </div>
   );
 };
