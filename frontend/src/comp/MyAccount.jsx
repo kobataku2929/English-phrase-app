@@ -2,10 +2,12 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import CreateFolder from "./CreateFolder";
+import PostEditor from "./PostEditor";
 import { logout, setName } from "../redux/userSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-
+import DriveFileRenameOutlineRoundedIcon from "@mui/icons-material/DriveFileRenameOutlineRounded";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { setData, setError } from "../redux/postSlice";
 import Avatar from "@mui/material/Avatar";
 import { red, cyan, teal } from "@mui/material/colors";
@@ -163,6 +165,8 @@ const MyAcount = () => {
       {auth ? (
         <div>
           <EditNoteRoundedIcon />
+          <PushPinRoundedIcon />
+          <VerifiedUserRoundedIcon />
           <h3>{storedName}としてログイン</h3>
 
           <button onClick={handleDelete}>Logout</button>
@@ -183,10 +187,11 @@ const MyAcount = () => {
             {data.map((item) => (
               <li key={item.id}>
                 <br />
-
-                <MoreHorizRoundedIcon
-                  onClick={() => openModal(item.id, item.phrase)}
-                />
+                <span className=" hover:bg-gray-300 focus:bg-gray-300   focus:ring focus:ring-gray-400   py-0.5 rounded">
+                  <MoreHorizRoundedIcon
+                    onClick={() => openModal(item.id, item.phrase)}
+                  />
+                </span>
                 {isModalOpen && (
                   <div
                     onClick={(e) => {
@@ -194,31 +199,48 @@ const MyAcount = () => {
                     }}
                     className=" z-20 fixed inset-0 flex items-center justify-center bg-black bg-opacity-5"
                   >
-                    <div className="bg-white p-8 rounded">
+                    <div className="bg-white p-8 rounded relative">
                       <span
-                        className="close text-gray-500 hover:text-gray-700 text-2xl"
+                        className="absolute top-2 left-3 close text-gray-500 hover:text-gray-700 text-2xl"
                         onClick={closeModal}
                       >
                         &times;
                       </span>
-                      <br />
-                      <p>フレーズ: {currentPhrase}</p>
 
-                      <button onClick={() => handleEdit(currentPostId)}>
-                        Edit
-                      </button>
-                      <br />
+                      <p className="mt-3 text-xl">{currentPhrase}</p>
 
-                      <button onClick={() => handleRemove(currentPostId)}>
-                        削除
-                      </button>
+                      <div className="flex items-center pt-4">
+                        <DriveFileRenameOutlineRoundedIcon
+                          className="cursor-pointer"
+                          onClick={() => handleEdit(currentPostId)}
+                        />
+                        <span
+                          className="cursor-pointer ml-2"
+                          onClick={() => handleEdit(currentPostId)}
+                        >
+                          編集
+                        </span>
+                      </div>
+
+                      <div className="flex items-center">
+                        <DeleteIcon
+                          className="cursor-pointer"
+                          onClick={() => handleRemove(currentPostId)}
+                        />
+                        <span
+                          className="cursor-pointer ml-2"
+                          onClick={() => handleRemove(currentPostId)}
+                        >
+                          削除
+                        </span>
+                      </div>
                     </div>
                   </div>
                 )}
 
                 <br />
                 <div className="flex  ">
-                  <span className="mt-1  ">
+                  <span className="mt-1  ml-1">
                     <Avatar
                       sx={{
                         zIndex: 0,
@@ -234,9 +256,9 @@ const MyAcount = () => {
 
                   <span className="ml-2">{item.phrase}</span>
                 </div>
-                <br />
+
                 <div className="flex ">
-                  <span className="mt-1 ">
+                  <span className="mt-1 ml-1 ">
                     <Avatar
                       sx={{
                         bgcolor: teal[500],
@@ -252,10 +274,9 @@ const MyAcount = () => {
                   <span className="ml-2"> {item.japanese}</span>
                 </div>
 
-                <br />
                 {item.sentence ? (
                   <div className="flex ">
-                    <span className="mt-1 ">
+                    <span className="mt-1 ml-1">
                       <Avatar
                         sx={{
                           bgcolor: cyan[500],
@@ -272,7 +293,6 @@ const MyAcount = () => {
                   </div>
                 ) : null}
 
-                <br />
                 {item.details ? (
                   <div>
                     {foldedStates[item.id] ? (
@@ -286,7 +306,7 @@ const MyAcount = () => {
                       />
                     )}
                     {foldedStates[item.id] ? (
-                      <div className="text-lg ml-2 ">{item.details}</div>
+                      <div className=" ml-1 ">{item.details}</div>
                     ) : null}
                   </div>
                 ) : null}
